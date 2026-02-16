@@ -1,0 +1,73 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, develop, 'feature/**', 'bugfix/**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:8.2-alpine
+        env:
+          MONGO_INITDB_ROOT_USERNAME: test
+          MONGO_INITDB_ROOT_PASSWORD: test
+          MONGO_INITDB_DATABASE: cadenaSuministros_test
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
+
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linter
+      run: npm run lint || true
+
+    - name: Run unit tests
+      run: npm run test:unit
+      env:
+        MONGODB_URI: mongodb://test:test@localhost:27017/cadenaSuministros_test?authSource=admin
+
+    - name: Run integration tests
+      run: npm run test:integration
+      env:
+        MONGODB_URI: mongodb://test:test@localhost:27017/cadenaSuministros_test?authSource=admin
+
+    - name: Generate coverage report
+      run: npm test -- --coverage
+      env:
+        MONGODB_URI: mongodb://test:test@localhost:27017/cadenaSuministros_test?authSource=admin
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/coverage-final.json
+        flags: unittests
+        name: codecov-umbrella
+
+    - name: Comment PR with coverage
+      if: github.event_name == 'pull_request'
+      uses: romeovs/lcov-reporter-action@v0.3.1
+      with:
+        lcov-file: ./coverage/lcov.info

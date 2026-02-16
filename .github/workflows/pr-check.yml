@@ -1,0 +1,66 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR title format
+        uses: amannn/action-semantic-pull-request@v5
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            chore
+            ci
+            revert
+
+      - name: Require PR description
+        uses: actions.github.io/actions/require-pr-description@v1
+        continue-on-error: true
+        with:
+          message: 'Please add a detailed description of your changes'
+
+      - name: Commit lint
+        uses: wagoid/commitlint-github-action@v5
+
+      - name: Add labels based on changes
+        uses: actions/labeler@v4
+        with:
+          configuration-path: .github/labeler.yml
+
+      - name: Size limit check
+        uses: actions/size-limit-action@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          build_script: npm run build
+          skip_step: install
+
+  check-status:
+    needs: validation
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Update PR status
+        run: |
+          echo "PR validation checks completed"
