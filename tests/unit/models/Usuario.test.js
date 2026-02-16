@@ -50,7 +50,7 @@ describe('Usuario Model', () => {
         contraseña: 'test123'
       };
 
-      await expect(Usuario.create(usuarioInvalido)).rejects.toThrow();
+      await expect(Usuario.create(usuarioInvalid)).rejects.toThrow();
     });
 
     test('Debe asegurar unicidad de numeroDocumento', async () => {
