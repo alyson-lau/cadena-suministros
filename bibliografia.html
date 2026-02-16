@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadena de Suministros - Bibliografía</title>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+    <header>
+        <p><strong>CADENA DE SUMINISTROS</strong></p>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="acceso.html">Acceso</a></li>
+                <li><a href="tipodeusuario.html">Tipo de Usuario</a></li>
+                <li><a href="conclusion.html">Conclusión</a></li>
+                <li><a href="bibliografia.html" class="active">Bibliografía</a></li>
+                <li><a href="navegacion.html">Mapa de Navegación</a></li>
+                <li>
+                    <div class="user-info" id="userInfo" style="display: none;">
+                        <button class="user-button" onclick="toggleUserMenu()">
+                            <span class="user-icon">👤</span>
+                            <span class="user-name" id="headerUserName">Usuario</span>
+                            <span class="user-arrow">▼</span>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="user-dropdown-header">
+                                <p><strong>Nombre:</strong> <span id="dropdownUserName">-</span></p>
+                                <p><strong>Rol:</strong> <span id="dropdownUserRole">-</span></p>
+                            </div>
+                            <button class="logout-button" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="bibliografia">
+            <h2>Bibliografía</h2>
+            
+            <div class="bibliography-content">
+                <p>
+                Díaz, D. y Castiblanco, Y. (2020). Propuesta arquitectónica centro multipropósito cámara de comercio picaleña_ibagué Genius locci. Universidad del Tolima.<br>
+                https://repository.ut.edu.co/server/api/core/bitstreams/f1df4bdd-9f9f-49cf-a250-d79d2467e4e2/content
+            </p>
+            <p>
+                Colombiacompra (2024). Bases de datos.<br>
+                https://www.colombiacompra.gov.co/archivos/portfolio-item/catalogo-de-materiales-de-construccion-y-ferreteria-derivado-del-iad-mipymes
+            </p>
+            <p>
+                Datos de Colombia (2025). Catálogo de Materiales de Construcción y Ferretería MIPYMES. Base de datos.<br>
+                https://www.datos.gov.co/Vivienda-Ciudad-y-Territorio/Lista-oficial-de-precios-unitarios-fijos-de-Obra-P/ae7u-y7m2/about_data
+            </p>
+            <p>
+                Gobernación de boyacá (2023). Anexo 1. Listado de análisis de precios unitarios por capítulo 2023. Base de datos.<br>
+                https://www.boyaca.gov.co/wp-content/uploads/2023/03/ANEXO-1.-Listado-de-analisis-de-precios-unitarios-por-capitulo-2023.pdf
+            </p>
+            <p>
+                Grabación del Instructor SENA. Jonathan Berthel Castro (2025). Grabación - Sesión Sincrónica - AP1. Desarrollar la solución de software de acuerdo con el diseño y metodologías de desarrollo_04-12-2025.<br>
+                https://zajuna.sena.edu.co/zajuna/mod/url/view.php?id=5974582
+            </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Cadena de Suministros | Excelencia como estándar, compromiso como principio.</p>
+        <p>Autora: Aleydys Laura Morales</p>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/shared.js"></script>
+    <script>
+        // Verificar si hay sesión activa
+        document.addEventListener('DOMContentLoaded', () => {
+            checkActiveSession();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<div class="section">
+    <h2>Gestión de Materiales</h2>
+    
+    <div class="row">
+        <!-- Buscador -->
+        <div class="col s12 m8">
+            <div class="input-field">
+                <i class="material-icons prefix">search</i>
+                <input type="text" id="search" ng-model="searchQuery" ng-keyup="search()">
+                <label for="search">Buscar materiales...</label>
+            </div>
+        </div>
+        
+        <div class="col s12 m4">
+            <a class="btn btn-primary waves-effect waves-light" href="#!/materiales/nuevo">
+                <i class="material-icons left">add</i>
+                Agregar Material
+            </a>
+        </div>
+    </div>
+    
+    <!-- Tabla de Materiales -->
+    <div class="card">
+        <div class="card-content">
+            <table class="striped responsive-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Categoría</th>
+                        <th>Stock</th>
+                        <th>Proveedor</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-if="loading">
+                        <td colspan="6" class="center-align">
+                            <div class="progress">
+                                <div class="indeterminate"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr ng-if="!loading && materiales.length === 0">
+                        <td colspan="6" class="center-align">No hay materiales registrados</td>
+                    </tr>
+                    <tr ng-repeat="material in materiales" ng-if="!loading && materiales.length > 0">
+                        <td>{{ material.nombre }}</td>
+                        <td>{{ material.precio | currency }}</td>
+                        <td>{{ material.categoria }}</td>
+                        <td ng-class="{'low-stock': material.stock <= 10}">{{ material.stock }}</td>
+                        <td>{{ material.proveedor }}</td>
+                        <td>
+                            <a class="btn-floating btn-small waves-effect waves-light" ng-click="editarMaterial(material)">
+                                <i class="material-icons">edit</i>
+                            </a>
+                            <a class="btn-floating btn-small red waves-effect waves-light" ng-click="eliminarMaterial(material._id)">
+                                <i class="material-icons">delete</i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

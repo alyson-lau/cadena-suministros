@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadena de Suministros - Tipo de Usuario</title>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+    <header>
+        <p><strong>CADENA DE SUMINISTROS</strong></p>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="acceso.html">Acceso</a></li>
+                <li><a href="tipodeusuario.html" class="active">Tipo de Usuario</a></li>
+                <li><a href="conclusion.html">Conclusión</a></li>
+                <li><a href="bibliografia.html">Bibliografía</a></li>
+                <li><a href="navegacion.html">Mapa de Navegación</a></li>
+                <li>
+                    <div class="user-info" id="userInfo" style="display: none;">
+                        <button class="user-button" onclick="toggleUserMenu()">
+                            <span class="user-icon">👤</span>
+                            <span class="user-name" id="headerUserName">Usuario</span>
+                            <span class="user-arrow">▼</span>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="user-dropdown-header">
+                                <p><strong>Nombre:</strong> <span id="dropdownUserName">-</span></p>
+                                <p><strong>Rol:</strong> <span id="dropdownUserRole">-</span></p>
+                            </div>
+                            <button class="logout-button" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="user-info" id="userInfo" style="display: none;">
+                <button class="user-button" onclick="toggleUserMenu()">
+                    <span class="user-icon">👤</span>
+                    <span class="user-name" id="headerUserName">Usuario</span>
+                    <span class="user-arrow">▼</span>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <div class="user-dropdown-header">
+                        <p><strong>Nombre:</strong> <span id="dropdownUserName">-</span></p>
+                        <p><strong>Rol:</strong> <span id="dropdownUserRole">-</span></p>
+                    </div>
+                    <button class="logout-button" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
+                </div>
+            </div>
+            <div class="dev-tools" style="display: none;" id="devTools">
+                <button onclick="devShowUsers()">👥 Ver Usuarios</button>
+                <button onclick="devClearData()">🗑️ Limpiar Datos</button>
+                <button onclick="devDiagnoseButtons()">🔍 Diagnosticar Botones</button>
+                <button onclick="devTestLogin()">🧪 Test Login</button>
+            </div>
+
+        </nav>
+    </header>
+
+    <main>
+        <section id="usuario">
+            <h2>Tipo de Usuario</h2>
+            
+            <!-- Información de roles -->
+            <div class="roles-info">
+                <div class="role-card">
+                    <h3>🏢 Líder de Compras</h3>
+                    <p>Gestiona pedidos y negociaciones con proveedores. Tiene acceso completo al sistema de gestión de materiales y puede supervisar todas las operaciones.</p>
+                    <ul>
+                        <li>Gestión de pedidos</li>
+                        <li>Negociación de precios</li>
+                        <li>Aprobación de compras</li>
+                        <li>Reportes financieros</li>
+                    </ul>
+                </div>
+                
+                <div class="role-card">
+                    <h3>📊 Analista</h3>
+                    <p>Analiza precios y tendencias del mercado. Se enfoca en el análisis de datos y recomendaciones estratégicas para optimizar costos.</p>
+                    <ul>
+                        <li>Análisis de precios</li>
+                        <li>Tendencias del mercado</li>
+                        <li>Recomendaciones de compra</li>
+                        <li>Estudios de proveedores</li>
+                    </ul>
+                </div>
+                
+                <div class="role-card">
+                    <h3>💻 Desarrollador</h3>
+                    <p>Mantenimiento de la plataforma tecnológica. Garantiza el funcionamiento óptimo del sistema y desarrolla nuevas funcionalidades.</p>
+                    <ul>
+                        <li>Mantenimiento del sistema</li>
+                        <li>Desarrollo de nuevas funciones</li>
+                        <li>Soporte técnico</li>
+                        <li>Optimización de procesos</li>
+                    </ul>
+                </div>
+            </div>
+            
+
+            
+            <!-- Base de datos -->
+            <div class="database-section" id="databaseSection" style="display: none;">
+                <h3>Base de Datos de Materiales</h3>
+                
+                <!-- Panel de estadísticas y retroalimentación -->
+                <div class="dashboard-stats" id="dashboardStats">
+                    <div class="stat-card">
+                        <h4>Total Materiales</h4>
+                        <span class="stat-number" id="totalMaterials">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Valor Total</h4>
+                        <span class="stat-number" id="totalValue">$0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Categorías</h4>
+                        <span class="stat-number" id="totalCategories">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Stock Bajo</h4>
+                        <span class="stat-number warning" id="lowStock">0</span>
+                    </div>
+                </div>
+
+                <!-- Barra de búsqueda y acciones -->
+                <div class="database-controls">
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Buscar materiales por nombre, categoría o proveedor...">
+                        <button id="searchBtn">🔍 Buscar</button>
+                    </div>
+                    <div class="action-buttons" id="materialActions">
+                        <button id="addMaterialBtn" class="btn-primary">➕ Agregar Material</button>
+                        <button id="refreshBtn">🔄 Actualizar</button>
+                        <button id="clearMaterialsBtn" onclick="clearAddedMaterials()">🗑️ Eliminar Últimos</button>
+                    </div>
+                </div>
+
+                
+                <div id="databaseContent">
+                    <p>Cargando base de datos...</p>
+                </div>
+                
+                <div class="database-actions">
+                    <div class="action-cards">
+                        <div class="action-card">
+                            <h3>📥 Descargar Base de Datos</h3>
+                            <p>Obtenga una base de datos viable para editar y solicitar información a proveedores</p>
+                            <div class="download-options">
+                                <button onclick="downloadDatabase('csv')" class="btn-secondary">📊 Descargar CSV</button>
+                            </div>
+                        </div>
+                        
+                        <div class="action-card">
+                            <h3>📤 Subir Base de Datos Actualizada</h3>
+                            <p>Suba la base de datos editada con información de proveedores. Recomendaciones:</p>
+                            <p>+ Use coma (,) en vez de punto y coma (;) en sus descripciones.</p>
+                            <p>+ Use el ID consecutivo al actualizar los nuevos materiales.</p>
+                            <div id="dropZone" class="drop-zone">
+                                <p>Arrastre archivos aquí o haga clic para seleccionar</p>
+                                <p>Formatos: CSV</p>
+                                <input type="file" id="fileInput" multiple accept=".csv" hidden>
+                            </div>
+                            <button id="processFilesBtn">🔄 Procesar Archivos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estadística Global -->
+            <div class="statistics-section" id="statisticsSection">
+                <h3>📊 Estadística Global</h3>
+                
+                <!-- Panel de estadísticas y retroalimentación -->
+                <div class="dashboard-stats" id="dashboardStats">
+                    <div class="stat-card">
+                        <h4>Total Materiales</h4>
+                        <span class="stat-number" id="statTotalMaterials">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Valor Total</h4>
+                        <span class="stat-number" id="statTotalValue">$0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Categorías</h4>
+                        <span class="stat-number" id="statTotalCategories">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Stock Bajo</h4>
+                        <span class="stat-number warning" id="statLowStock">0</span>
+                    </div>
+                </div>
+
+                <!-- Por Categoría -->
+                <div class="stats-by-category">
+                    <h4>🏷️ Por Categoría</h4>
+                    <div class="table-container">
+                        <table class="stats-table" id="statsByCategory">
+                            <thead>
+                                <tr>
+                                    <th>Categoría</th>
+                                    <th>Total Materiales</th>
+                                    <th>Valor Total</th>
+                                    <th>Proveedores</th>
+                                    <th>Stock Bajo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="5">Cargando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Por Proveedor -->
+                <div class="stats-by-provider">
+                    <h4>📦 Por Proveedor</h4>
+                    <div class="table-container">
+                        <table class="stats-table" id="statsByProvider">
+                            <thead>
+                                <tr>
+                                    <th>Proveedor</th>
+                                    <th>Total Materiales</th>
+                                    <th>Valor Total</th>
+                                    <th>Categorías</th>
+                                    <th>Stock Bajo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="5">Cargando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para agregar/editar materiales -->
+            <div id="materialModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeMaterialModal()">&times;</span>
+                    <h3 id="modalTitle">Agregar Material</h3>
+                    <form id="materialForm">
+                        <div class="form-group">
+                            <label for="materialNombre">Nombre:</label>
+                            <input type="text" id="materialNombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="materialPrecio">Precio:</label>
+                            <input type="number" id="materialPrecio" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="materialCategoria">Categoría:</label>
+                            <select id="materialCategoria" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Materiales cementantes">Materiales cementantes</option>
+                                <option value="Estructurales">Estructurales</option>
+                                <option value="Mampostería">Mampostería</option>
+                                <option value="Agregados">Agregados</option>
+                                <option value="Acabados">Acabados</option>
+                                <option value="Herramientas">Herramientas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="materialStock">Stock:</label>
+                            <input type="number" id="materialStock" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="materialProveedor">Proveedor:</label>
+                            <input type="text" id="materialProveedor" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Guardar</button>
+                            <button type="button" onclick="closeMaterialModal()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Cadena de Suministros | Excelencia como estándar, compromiso como principio.</p>
+        <p>Autora: Aleydys Laura Morales</p>
+    </footer>
+
+    <script>
+        // ============= VERSIÓN AUTÓNOMA FUNCIONAL =============
+        
+        let currentUser = null;
+        let currentMaterials = [];
+        let editingMaterialId = null;
+        
+        // Materiales por defecto
+        const defaultMaterials = [
+            { id: 1, nombre: "Cemento gris", precio: 32000, categoria: "Materiales cementantes", stock: 100, proveedor: "Cemex Colombia" },
+            { id: 2, nombre: "Varilla de acero", precio: 28000, categoria: "Estructurales", stock: 50, proveedor: "Acerías Paz del Río" },
+            { id: 3, nombre: "Ladrillo cerámico", precio: 850, categoria: "Mampostería", stock: 1000, proveedor: "Cerámicas Andina" },
+            { id: 4, nombre: "Arena gruesa", precio: 15000, categoria: "Agregados", stock: 500, proveedor: "Canteras del Río" },
+            { id: 5, nombre: "Bloque de concreto", precio: 2500, categoria: "Mampostería", stock: 800, proveedor: "Prefabricados Nacional" },
+            { id: 6, nombre: "Acero corrugado", precio: 29000, categoria: "Estructurales", stock: 40, proveedor: "Acerías Paz del Río" },
+            { id: 7, nombre: "Arena fina", precio: 12000, categoria: "Agregados", stock: 600, proveedor: "Canteras del Río" },
+            { id: 8, nombre: "Pintura látex", precio: 45000, categoria: "Acabados", stock: 200, proveedor: "Pintuco" },
+            { id: 9, nombre: "Malla electrosoldada", precio: 35000, categoria: "Estructurales", stock: 30, proveedor: "Acerías Paz del Río" },
+            { id: 10, nombre: "Grava", precio: 18000, categoria: "Agregados", stock: 400, proveedor: "Canteras del Río" }
+        ];
+        
+        // Materiales de prueba para vista sin login
+        const materialsPrueba = [
+            { id: 1, nombre: "Tornillo 1/4", precio: 500, categoria: "Herramientas", stock: 1000, proveedor: "Ferretería Central" },
+            { id: 2, nombre: "Malla electrosoldada 6x6", precio: 45000, categoria: "Estructurales", stock: 200, proveedor: "Acero del Pacífico" },
+            { id: 3, nombre: "Teja Romana", precio: 3500, categoria: "Acabados", stock: 8000, proveedor: "Cerámicas Andina" },
+            { id: 4, nombre: "Grava 3/4\"", precio: 18000, categoria: "Agregados", stock: 400, proveedor: "Canteras del Río" },
+            { id: 5, nombre: "Impermeabilizante", precio: 25000, categoria: "Herramientas", stock: 100, proveedor: "Químicos S.A." },
+            { id: 6, nombre: "Clavos 3\"", precio: 2000, categoria: "Estructurales", stock: 5000, proveedor: "Ferretería del Valle" }
+        ];
+        
+        // Contador para nuevos IDs
+        let nextId = 11;
+        
+        // Contador para IDM (ID Material) e IDP (ID Proveedor)
+        let nextIdMaterial = 1;
+        let nextIdProveedor = 1;
+        
+        // Mapa de proveedores: nombre -> IDP único
+        let proveedorIdMap = {};
+        
+        // Función para obtener el siguiente ID único para material
+        function getNextIdMaterial() {
+            while (currentMaterials.some(m => m.idm === nextIdMaterial)) {
+                nextIdMaterial++;
+            }
+            return nextIdMaterial++;
+        }
+        
+        // Función para obtener IDP único de proveedor
+        function getIdProveedor(proveedorNombre) {
+            if (!proveedorNombre) return '';
+            
+            const nombre = proveedorNombre.trim().toUpperCase();
+            
+            // Si ya existe el proveedor, retornar su IDP
+            if (proveedorIdMap[nombre]) {
+                return proveedorIdMap[nombre];
+            }
+            
+            // Crear nuevo IDP
+            const nuevoIdp = nextIdProveedor++;
+            proveedorIdMap[nombre] = nuevoIdp;
+            return nuevoIdp;
+        }
+        
+        // Función para obtener el siguiente ID único
+        function getNextId() {
+            while (currentMaterials.some(m => m.id === nextId)) {
+                nextId++;
+            }
+            return nextId++;
+        }
+        
+        // Función para inicializar IDM e IDP desde los materiales existentes
+        function initializeIdCounters() {
+            currentMaterials.forEach(m => {
+                // Actualizar contador de IDM
+                if (m.idm) {
+                    const idm = parseInt(m.idm);
+                    if (!isNaN(idm) && idm >= nextIdMaterial) {
+                        nextIdMaterial = idm + 1;
+                    }
+                }
+                
+                // Actualizar mapa de proveedores
+                if (m.proveedor) {
+                    const nombre = m.proveedor.trim().toUpperCase();
+                    if (!proveedorIdMap[nombre]) {
+                        proveedorIdMap[nombre] = m.idp || getIdProveedor(m.proveedor);
+                    }
+                    // Actualizar contador de IDP
+                    const idp = proveedorIdMap[nombre];
+                    if (idp && idp >= nextIdProveedor) {
+                        nextIdProveedor = idp + 1;
+                    }
+                }
+            });
+        }
+        
+        // Usuarios registrados
+        let registeredUsers = [];
+        
+        // Cargar datos desde localStorage
+        function loadData() {
+            try {
+                const savedUsers = localStorage.getItem('cadenaSuministros_usuarios');
+                if (savedUsers) {
+                    registeredUsers = JSON.parse(savedUsers);
+                }
+                
+                const savedMaterials = localStorage.getItem('cadenaSuministros_materiales');
+                if (savedMaterials) {
+                    currentMaterials = JSON.parse(savedMaterials);
+                    
+                    // Calcular el siguiente ID basándose en los materiales existentes
+                    if (currentMaterials.length > 0) {
+                        const maxId = currentMaterials.reduce((max, m) => {
+                            const id = parseInt(m.id);
+                            return (!isNaN(id) && id > max) ? id : max;
+                        }, 0);
+                        nextId = maxId + 1;
+                    }
+                } else {
+                    currentMaterials = [...defaultMaterials];
+                    saveMaterials();
+                }
+                
+                const savedSession = localStorage.getItem('cadenaSuministros_sesionActiva');
+                if (savedSession) {
+                    const sessionData = JSON.parse(savedSession);
+                    const sessionAge = Date.now() - sessionData.loginTime;
+                    const maxSessionAge = 24 * 60 * 60 * 1000; // 24 horas
+                    
+                    if (sessionAge < maxSessionAge) {
+                        currentUser = sessionData.user;
+                        showDatabaseInterface();
+                        showMessage(`¡Bienvenido de vuelta, ${currentUser.nombre}!`, 'success');
+                    } else {
+                        localStorage.removeItem('cadenaSuministros_sesionActiva');
+                        showPublicInterface();
+                    }
+                } else {
+                    // No hay sesión activa, mostrar vista pública
+                    showPublicInterface();
+                }
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+            }
+        }
+        
+        // Guardar datos
+        function saveUsers() {
+            try {
+                localStorage.setItem('cadenaSuministros_usuarios', JSON.stringify(registeredUsers));
+            } catch (error) {
+                console.error('Error guardando usuarios:', error);
+            }
+        }
+        
+        function saveMaterials() {
+            try {
+                localStorage.setItem('cadenaSuministros_materiales', JSON.stringify(currentMaterials));
+            } catch (error) {
+                console.error('Error guardando materiales:', error);
+            }
+        }
+        
+        // Sistema de mensajes
+        function showMessage(message, type = 'info') {
+            const messageEl = document.createElement('div');
+            messageEl.className = `message message-${type}`;
+            messageEl.textContent = message;
+            messageEl.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+            `;
+            
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                info: '#17a2b8',
+                warning: '#ffc107'
+            };
+            
+            messageEl.style.backgroundColor = colors[type] || colors.info;
+            
+            document.body.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (messageEl.parentNode) {
+                        messageEl.parentNode.removeChild(messageEl);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Navegación entre formularios - Ahora ambos formularios son visibles simultáneamente
+        function showLoginForm() {
+            // Ya no ocultamos el registro, ambos formularios están visibles
+            document.getElementById('recoveryForm').style.display = 'none';
+            document.getElementById('recoveryResult').style.display = 'none';
+            
+            // Pre-llenar con último usuario
+            if (registeredUsers.length > 0) {
+                document.getElementById('loginDocumento').value = registeredUsers[registeredUsers.length - 1].numeroDocumento;
+            }
+        }
+        
+        function showRegisterForm() {
+            // Ya no ocultamos el login, ambos formularios están visibles
+            document.getElementById('recoveryForm').style.display = 'none';
+        }
+        
+        function showRecoveryForm() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('recoveryForm').style.display = 'block';
+            document.getElementById('recoveryResult').style.display = 'none';
+            document.getElementById('recoveryFormElement').reset();
+        }
+        
+        function showPublicInterface() {
+            // Mostrar sección de roles (siempre visible)
+            document.querySelector('.roles-info').style.display = 'flex';
+            
+            // Mostrar sección de base de datos con materiales de prueba
+            document.getElementById('databaseSection').style.display = 'block';
+            
+            // Usar materiales de prueba para usuarios no logueados
+            currentMaterials = [...materialsPrueba];
+            
+            // Ocultar botones de acción para usuarios no logueados
+            const actionButtons = document.getElementById('materialActions');
+            if (actionButtons) actionButtons.style.display = 'none';
+            
+            // Ocultar controles de búsqueda
+            const databaseControls = document.querySelector('.database-controls');
+            if (databaseControls) databaseControls.style.display = 'none';
+            
+            // Ocultar acciones de descarga/subida
+            const databaseActions = document.querySelector('.database-actions');
+            if (databaseActions) databaseActions.style.display = 'none';
+            
+            // Mostrar materiales de prueba en modo solo lectura
+            displayMaterialsReadOnly(currentMaterials);
+            
+            // Mostrar estadísticas globales
+            document.getElementById('statisticsSection').style.display = 'block';
+            updateStatistics();
+            updateGlobalStatistics();
+        }
+        
+        function showDatabaseInterface() {
+            // Mostrar banner de usuario logueado
+            showUserBanner();
+            
+            // Mostrar sección de roles
+            document.querySelector('.roles-info').style.display = 'flex';
+            document.getElementById('databaseSection').style.display = 'block';
+            document.getElementById('statisticsSection').style.display = 'block';
+            
+            // Mostrar botones de acción para usuarios logueados
+            const actionButtons = document.getElementById('materialActions');
+            if (actionButtons) actionButtons.style.display = 'flex';
+            
+            // Mostrar controles de búsqueda
+            const databaseControls = document.querySelector('.database-controls');
+            if (databaseControls) databaseControls.style.display = 'flex';
+            
+            // Mostrar acciones de descarga/subida
+            const databaseActions = document.querySelector('.database-actions');
+            if (databaseActions) databaseActions.style.display = 'block';
+            
+            // Inicializar upload de archivos después de mostrar la interfaz
+            setTimeout(() => {
+                initializeFileUpload();
+            }, 100);
+            
+            refreshDisplay();
+            updateStatistics();
+        }
+        
+        function displayMaterialsReadOnly(materials = currentMaterials) {
+            const databaseContent = document.getElementById('databaseContent');
+            
+            if (materials.length === 0) {
+                databaseContent.innerHTML = '<div class="no-materials-message">No hay materiales registrados</div>';
+                return;
+            }
+            
+            const tableHTML = `
+                <div class="materials-table-container">
+                    <table class="materials-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Categoría</th>
+                                <th>Stock</th>
+                                <th>Proveedor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${materials.map(material => `
+                                <tr class="material-row">
+                                    <td class="material-id">${material.id}</td>
+                                    <td class="material-name">${material.nombre}</td>
+                                    <td class="material-price">$${material.precio.toLocaleString('es-CO')}</td>
+                                    <td class="material-category">${material.categoria}</td>
+                                    <td class="material-stock ${material.stock <= 10 ? 'low-stock' : ''}">${material.stock}</td>
+                                    <td class="material-provider">${material.proveedor}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="readonly-notice">📌 Vista de solo lectura. <a href="acceso.html">Inicie sesión</a> para gestionar materiales.</p>
+            `;
+            
+            databaseContent.innerHTML = tableHTML;
+        }
+        
+        function showUserBanner() {
+            const userInfo = document.getElementById('userInfo');
+            if (currentUser && userInfo) {
+                userInfo.style.display = 'flex';
+                document.getElementById('headerUserName').textContent = currentUser.nombre;
+                document.getElementById('dropdownUserName').textContent = currentUser.nombre;
+                
+                const roleNames = {
+                    'lider': 'Líder de Compras',
+                    'analista': 'Analista',
+                    'desarrollador': 'Desarrollador'
+                };
+                document.getElementById('dropdownUserRole').textContent = roleNames[currentUser.tipoUsuario] || currentUser.tipoUsuario;
+            }
+        }
+        
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('show');
+        }
+        
+        function cerrarSesion() {
+            if (confirm('¿Está seguro que desea cerrar sesión?')) {
+                localStorage.removeItem('cadenaSuministros_sesionActiva');
+                currentUser = null;
+                location.reload();
+            }
+        }
+        
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            const userInfo = document.getElementById('userInfo');
+            const dropdown = document.getElementById('userDropdown');
+            if (userInfo && !userInfo.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+        
+        // Validación de formularios
+        function validateField(input) {
+            let isValid = true;
+            let errorMessage = '';
+            
+            // Eliminar mensaje de error anterior
+            const existingError = input.parentElement.querySelector('.error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+            input.classList.remove('input-error');
+            
+            // Validar según el tipo de campo
+            if (input.id === 'nombre') {
+                if (input.value.trim().length < 3) {
+                    isValid = false;
+                    errorMessage = 'El nombre debe tener al menos 3 caracteres';
+                }
+            } else if (input.id === 'numeroDocumento') {
+                if (!/^[0-9]{5,15}$/.test(input.value.trim())) {
+                    isValid = false;
+                    errorMessage = 'El número de documento debe tener entre 5 y 15 dígitos';
+                }
+            } else if (input.id === 'contraseña') {
+                if (input.value.length < 6) {
+                    isValid = false;
+                    errorMessage = 'La contraseña debe tener al menos 6 caracteres';
+                }
+            } else if (input.id === 'confirmarContraseña') {
+                const contraseña = document.getElementById('contraseña').value;
+                if (input.value !== contraseña) {
+                    isValid = false;
+                    errorMessage = 'Las contraseñas no coinciden';
+                }
+            } else if (input.hasAttribute('required') && !input.value.trim()) {
+                isValid = false;
+                errorMessage = 'Este campo es obligatorio';
+            }
+            
+            if (!isValid) {
+                input.classList.add('input-error');
+                
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = errorMessage;
+                errorDiv.style.cssText = `
+                    color: #dc3545;
+                    font-size: 0.875rem;
+                    margin-top: 0.25rem;
+                `;
+                
+                input.parentElement.appendChild(errorDiv);
+            }
+            
+            return isValid;
+        }
+        
+        // Mostrar materiales
+        function displayMaterials(materials = currentMaterials) {
+            const databaseContent = document.getElementById('databaseContent');
+            
+            if (materials.length === 0) {
+                databaseContent.innerHTML = '<div class="no-materials">No hay materiales registrados</div>';
+                return;
+            }
+            
+            const tableHTML = `
+                <div class="materials-table-container">
+                    <table class="materials-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Categoría</th>
+                                <th>Stock</th>
+                                <th>Proveedor</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${materials.map(material => `
+                                <tr class="material-row">
+                                    <td class="material-id">${material.id}</td>
+                                    <td class="material-name">${material.nombre}</td>
+                                    <td class="material-price">$${material.precio.toLocaleString('es-CO')}</td>
+                                    <td class="material-category">${material.categoria}</td>
+                                    <td class="material-stock ${material.stock <= 10 ? 'low-stock' : ''}">${material.stock}</td>
+                                    <td class="material-provider">${material.proveedor}</td>
+                                    <td class="material-actions">
+                                        <button onclick="editMaterial(${material.id})" class="btn-edit">✏️</button>
+                                        <button onclick="deleteMaterial(${material.id})" class="btn-delete">🗑️</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            databaseContent.innerHTML = tableHTML;
+        }
+        
+        // Actualizar estadísticas
+        function updateStatistics() {
+            document.getElementById('totalMaterials').textContent = currentMaterials.length;
+            // Valor total = suma de (precio × stock) de cada material
+            const totalValue = currentMaterials.reduce((sum, m) => sum + (m.precio * m.stock), 0);
+            document.getElementById('totalValue').textContent = `$${totalValue.toLocaleString('es-CO')}`;
+            document.getElementById('totalCategories').textContent = [...new Set(currentMaterials.map(m => m.categoria))].length;
+            document.getElementById('lowStock').textContent = currentMaterials.filter(m => m.stock <= 10).length;
+            
+            // Actualizar estadísticas globales
+            updateGlobalStatistics();
+        }
+        
+        // Actualizar estadísticas globales
+        function updateGlobalStatistics() {
+            // 1. Resumen General
+            const totalMateriales = currentMaterials.length;
+            const valorTotal = currentMaterials.reduce((sum, m) => sum + (m.precio * m.stock), 0);
+            const categorias = [...new Set(currentMaterials.map(m => m.categoria))].length;
+            const stockBajo = currentMaterials.filter(m => m.stock <= 10).length;
+            
+            document.getElementById('statTotalMaterials').textContent = totalMateriales;
+            document.getElementById('statTotalValue').textContent = `$${valorTotal.toLocaleString('es-CO')}`;
+            document.getElementById('statTotalCategories').textContent = categorias;
+            document.getElementById('statLowStock').textContent = stockBajo;
+            
+            // 2. Por Categoría
+            const statsPorCategoria = {};
+            currentMaterials.forEach(m => {
+                const cat = m.categoria || 'General';
+                if (!statsPorCategoria[cat]) {
+                    statsPorCategoria[cat] = {
+                        nombre: cat,
+                        totalMateriales: 0,
+                        valorTotal: 0,
+                        proveedores: new Set(),
+                        stockBajo: 0
+                    };
+                }
+                statsPorCategoria[cat].totalMateriales++;
+                statsPorCategoria[cat].valorTotal += (m.precio * m.stock);
+                statsPorCategoria[cat].proveedores.add(m.proveedor);
+                if (m.stock <= 10) statsPorCategoria[cat].stockBajo++;
+            });
+            
+            // Renderizar tabla por categoría
+            const categoryTable = document.getElementById('statsByCategory').querySelector('tbody');
+            const categoryRows = Object.values(statsPorCategoria)
+                .sort((a, b) => b.valorTotal - a.valorTotal)
+                .map(c => `
+                    <tr>
+                        <td>${c.nombre}</td>
+                        <td>${c.totalMateriales}</td>
+                        <td>$${c.valorTotal.toLocaleString('es-CO')}</td>
+                        <td>${c.proveedores.size}</td>
+                        <td class="${c.stockBajo > 0 ? 'low-stock' : ''}">${c.stockBajo}</td>
+                    </tr>
+                `).join('');
+            categoryTable.innerHTML = categoryRows || '<tr><td colspan="5">No hay datos</td></tr>';
+            
+            // 3. Por Proveedor
+            const statsPorProveedor = {};
+            currentMaterials.forEach(m => {
+                const prov = m.proveedor || 'Sin especificar';
+                if (!statsPorProveedor[prov]) {
+                    statsPorProveedor[prov] = {
+                        nombre: prov,
+                        totalMateriales: 0,
+                        valorTotal: 0,
+                        categorias: new Set(),
+                        stockBajo: 0
+                    };
+                }
+                statsPorProveedor[prov].totalMateriales++;
+                statsPorProveedor[prov].valorTotal += (m.precio * m.stock);
+                statsPorProveedor[prov].categorias.add(m.categoria);
+                if (m.stock <= 10) statsPorProveedor[prov].stockBajo++;
+            });
+            
+            // Renderizar tabla por proveedor
+            const providerTable = document.getElementById('statsByProvider').querySelector('tbody');
+            const providerRows = Object.values(statsPorProveedor)
+                .sort((a, b) => b.valorTotal - a.valorTotal)
+                .map(p => `
+                    <tr>
+                        <td>${p.nombre}</td>
+                        <td>${p.totalMateriales}</td>
+                        <td>$${p.valorTotal.toLocaleString('es-CO')}</td>
+                        <td>${p.categorias.size}</td>
+                        <td class="${p.stockBajo > 0 ? 'low-stock' : ''}">${p.stockBajo}</td>
+                    </tr>
+                `).join('');
+            providerTable.innerHTML = providerRows || '<tr><td colspan="5">No hay datos</td></tr>';
+        }
+        
+        // CRUD de materiales
+        function editMaterial(id) {
+            const material = currentMaterials.find(m => m.id === id);
+            if (!material) return;
+            
+            const nuevosDatos = {
+                precio: prompt('Precio actual: ' + material.precio + '\nNuevo precio:', material.precio),
+                categoria: prompt('Categoría actual: ' + material.categoria + '\nNueva categoría:', material.categoria),
+                stock: prompt('Stock actual: ' + material.stock + '\nNuevo stock:', material.stock),
+                proveedor: prompt('Proveedor actual: ' + material.proveedor + '\nNuevo proveedor:', material.proveedor)
+            };
+            
+            if (nuevosDatos.precio !== null && nuevosDatos.precio !== '') {
+                const precio = parseFloat(nuevosDatos.precio);
+                if (!isNaN(precio) && precio >= 0) {
+                    material.precio = precio;
+                } else {
+                    showMessage('Precio inválido', 'error');
+                    return;
+                }
+            }
+            
+            if (nuevosDatos.categoria !== null && nuevosDatos.categoria !== '') {
+                material.categoria = nuevosDatos.categoria;
+            }
+            
+            if (nuevosDatos.stock !== null && nuevosDatos.stock !== '') {
+                const stock = parseInt(nuevosDatos.stock);
+                if (!isNaN(stock) && stock >= 0) {
+                    material.stock = stock;
+                } else {
+                    showMessage('Stock inválido', 'error');
+                    return;
+                }
+            }
+            
+            if (nuevosDatos.proveedor !== null && nuevosDatos.proveedor !== '') {
+                material.proveedor = nuevosDatos.proveedor;
+            }
+            
+            saveMaterials();
+            refreshDisplay();
+            updateStatistics();
+            updateGlobalStatistics();
+            showMessage('Material actualizado correctamente', 'success');
+        }
+        
+        function deleteMaterial(id) {
+            const index = currentMaterials.findIndex(m => m.id === id);
+            if (index === -1) return;
+            
+            const material = currentMaterials[index];
+            if (confirm(`¿Eliminar "${material.nombre}"?`)) {
+                currentMaterials.splice(index, 1);
+                saveMaterials();
+                refreshDisplay();
+                updateStatistics();
+                showMessage('Material eliminado correctamente', 'success');
+            }
+        }
+        
+        // Variable para almacenar resultados de búsqueda actuales
+        let currentSearchResults = null;
+        
+        // Búsqueda
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            if (query === '') {
+                currentSearchResults = null;
+                displayMaterials(currentMaterials);
+            } else {
+                currentSearchResults = currentMaterials.filter(m => 
+                    m.nombre.toLowerCase().includes(query) ||
+                    m.categoria.toLowerCase().includes(query) ||
+                    m.proveedor.toLowerCase().includes(query)
+                );
+                displayMaterials(currentSearchResults);
+            }
+        });
+        
+        // Función auxiliar para mostrar materiales (maneja búsqueda)
+        function refreshDisplay() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput.value.toLowerCase();
+            if (query === '') {
+                currentSearchResults = null;
+                displayMaterials(currentMaterials);
+            } else {
+                currentSearchResults = currentMaterials.filter(m => 
+                    m.nombre.toLowerCase().includes(query) ||
+                    m.categoria.toLowerCase().includes(query) ||
+                    m.proveedor.toLowerCase().includes(query)
+                );
+                displayMaterials(currentSearchResults);
+            }
+        }
+        
+        // Actualizar
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            document.getElementById('searchInput').value = '';
+            currentSearchResults = null;
+            refreshDisplay();
+            updateStatistics();
+            showMessage('Base de datos actualizada', 'info');
+        });
+        
+        // Función para limpiar todos los materiales
+        window.clearAllMaterials = function() {
+            if (confirm('¿Está seguro que desea eliminar TODOS los materiales? Esta acción no se puede deshacer.')) {
+                currentMaterials = [...defaultMaterials];
+                saveMaterials();
+                document.getElementById('searchInput').value = '';
+                currentSearchResults = null;
+                refreshDisplay();
+                updateStatistics();
+                showMessage('Materiales reseteados a los valores por defecto', 'success');
+            }
+        };
+        
+        // Función para limpiar SOLO los materiales agregados (mantiene los originales)
+        window.clearAddedMaterials = function() {
+            const originalNames = defaultMaterials.map(m => m.nombre.toLowerCase());
+            const originalPrices = defaultMaterials.map(m => m.precio);
+            
+            // Filtrar solo los materiales originales
+            currentMaterials = currentMaterials.filter((m, index) => {
+                const isOriginal = originalNames.includes(m.nombre.toLowerCase()) && 
+                                  originalPrices.includes(m.precio);
+                return isOriginal;
+            });
+            
+            saveMaterials();
+            refreshDisplay();
+            updateStatistics();
+            showMessage('Materiales agregados eliminados. Se mantuvieron los originales.', 'success');
+        };
+        
+        // Modal de agregar material
+        document.getElementById('addMaterialBtn').addEventListener('click', () => {
+            editingMaterialId = null;
+            document.getElementById('modalTitle').textContent = 'Agregar Material';
+            document.getElementById('materialForm').reset();
+            document.getElementById('materialModal').style.display = 'flex';
+        });
+        
+        function closeMaterialModal() {
+            document.getElementById('materialModal').style.display = 'none';
+            editingMaterialId = null;
+        }
+        
+        document.getElementById('materialForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const materialData = {
+                id: Date.now(),
+                nombre: document.getElementById('materialNombre').value,
+                precio: parseFloat(document.getElementById('materialPrecio').value),
+                categoria: document.getElementById('materialCategoria').value,
+                stock: parseInt(document.getElementById('materialStock').value),
+                proveedor: document.getElementById('materialProveedor').value
+            };
+            
+            currentMaterials.push(materialData);
+            saveMaterials();
+            refreshDisplay();
+            updateStatistics();
+            closeMaterialModal();
+            showMessage('Material agregado correctamente', 'success');
+        });
+        
+        // Funciones de upload de archivos
+        function initializeFileUpload() {
+            if (window.fileUploadInitialized) return;
+            window.fileUploadInitialized = true;
+            
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const processBtn = document.getElementById('processFilesBtn');
+            
+            if (!dropZone || !fileInput || !processBtn) return;
+            
+            dropZone.addEventListener('click', () => fileInput.click());
+            
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.style.backgroundColor = 'rgba(15, 98, 254, 0.05)';
+            });
+            
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.style.backgroundColor = 'transparent';
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.backgroundColor = 'transparent';
+                
+                const files = Array.from(e.dataTransfer.files);
+                handleFiles(files);
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                handleFiles(files);
+            });
+            
+            processBtn.addEventListener('click', processSelectedFiles);
+        }
+        
+        function handleFiles(files) {
+            if (files.length === 0) return;
+            
+            const dropZone = document.getElementById('dropZone');
+            const processBtn = document.getElementById('processFilesBtn');
+            
+            // Actualizar UI
+            dropZone.innerHTML = `
+                <p><strong>${files.length} archivo(s) seleccionado(s)</strong></p>
+                <p>${files.map(f => f.name).join(', ')}</p>
+            `;
+            
+            processBtn.style.display = 'inline-block';
+            processBtn.textContent = 'Procesar Archivos';
+            
+            // Guardar archivos para procesar
+            window.selectedFiles = files;
+        }
+        
+        async function processSelectedFiles() {
+            if (!window.selectedFiles || window.selectedFiles.length === 0) {
+                showMessage('No hay archivos seleccionados', 'error');
+                return;
+            }
+            
+            const processBtn = document.getElementById('processFilesBtn');
+            const dropZone = document.getElementById('dropZone');
+            
+            try {
+                processBtn.disabled = true;
+                processBtn.textContent = 'Procesando archivos...';
+                
+                let processedCount = 0;
+                
+                for (const file of window.selectedFiles) {
+                    console.log('Procesando archivo:', file.name);
+                    
+                    if (file.name.endsWith('.csv')) {
+                        // Procesar CSV - versión universal
+                        try {
+                            const text = await readFileAsText(file);
+                            
+                            // Detectar el separador (coma o punto y coma)
+                            const firstLine = text.split('\n')[0];
+                            const separator = firstLine.includes(';') ? ';' : ',';
+                            
+                            const lines = text.split('\n').filter(line => line.trim());
+                            
+                            if (lines.length > 1) {
+                                // Primera línea = headers
+                                const headerLine = lines[0].toLowerCase();
+                                const parts = headerLine.split(separator);
+                                
+                                // Encontrar índices de cada columna
+                                let idxNombre = -1, idxPrecio = -1, idxCategoria = -1, idxStock = -1, idxProveedor = -1;
+                                
+                                parts.forEach((h, i) => {
+                                    h = h.trim().toLowerCase();
+                                    if (h.includes('nom') || h.includes('name')) idxNombre = i;
+                                    if (h.includes('prec') || h.includes('price')) idxPrecio = i;
+                                    if (h.includes('cat')) idxCategoria = i;
+                                    if (h.includes('stock')) idxStock = i;
+                                    if (h.includes('prov') || h.includes('provider')) idxProveedor = i;
+                                });
+                                
+                                // Si no encuentra las columnas, usar orden por defecto
+                                if (idxNombre === -1) idxNombre = 1; // Skip ID
+                                if (idxPrecio === -1) idxPrecio = 2;
+                                if (idxCategoria === -1) idxCategoria = 3;
+                                if (idxStock === -1) idxStock = 4;
+                                if (idxProveedor === -1) idxProveedor = 5;
+                                
+                                // Procesar cada línea de datos
+                                for (let i = 1; i < lines.length; i++) {
+                                    const line = lines[i].trim();
+                                    if (!line) continue;
+                                    
+                                    // Dividir por el separador detectado
+                                    const values = line.split(separator).map(v => v.trim().replace(/^"|"$/g, ''));
+                                    
+                                        // Crear material solo si hay datos suficientes
+                                    if (values.length >= 5 && values[idxNombre]) {
+                                        // Limpiar precio (quitar puntos de miles)
+                                        let precio = String(values[idxPrecio] || '0').replace(/\./g, '').replace(',', '.');
+                                        if (isNaN(parseFloat(precio))) {
+                                            precio = '0';
+                                        }
+                                        
+                                        // Mantener el ID original o generar uno nuevo si no existe
+                                        let materialId = values[0] ? parseInt(values[0]) : (nextId++);
+                                        if (isNaN(materialId)) {
+                                            materialId = nextId++;
+                                        }
+                                        
+                                        const material = {
+                                            id: materialId,
+                                            nombre: values[idxNombre] || 'Sin nombre',
+                                            precio: parseFloat(precio) || 0,
+                                            categoria: values[idxCategoria] || 'General',
+                                            stock: parseInt(values[idxStock]) || 0,
+                                            proveedor: values[idxProveedor] || 'Sin especificar'
+                                        };
+                                        
+                                        // Solo agregar si tiene nombre válido
+                                        if (material.nombre && material.nombre.length > 0 && material.nombre !== 'undefined') {
+                                            currentMaterials.push(material);
+                                            processedCount++;
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Error procesando CSV:', file.name, error);
+                            showMessage('Error al procesar CSV. Verifique el formato.', 'error');
+                        }
+                    } else {
+                        showMessage(`Formato no válido: ${file.name}. Solo se aceptan archivos CSV.`, 'error');
+                    }
+                }
+                
+                // Guardar materiales y actualizar UI
+                saveMaterials();
+                refreshDisplay();
+                updateStatistics();
+                
+                showMessage(`${processedCount} materiales procesados exitosamente`, 'success');
+                
+            } catch (error) {
+                showMessage('Error procesando archivos: ' + error.message, 'error');
+            } finally {
+                // Resetear UI
+                processBtn.disabled = false;
+                processBtn.textContent = 'Procesar Archivos';
+                
+                if (dropZone) {
+                    dropZone.innerHTML = `
+                        <p>Arrastre archivos aquí o haga clic para seleccionar</p>
+                        <p>Formatos: CSV</p>
+                    `;
+                }
+                
+                window.selectedFiles = null;
+            }
+        }
+        
+        function readFileAsText(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Error leyendo archivo'));
+                reader.readAsText(file);
+            });
+        }
+        
+        // Descargar base de datos
+        function downloadDatabase(format) {
+            let content, filename, mimeType;
+            
+            if (format === 'csv') {
+                // CSV con formato correcto para Excel
+                let csv = 'ID,Nombre,Precio,Categoria,Stock,Proveedor\n';
+                
+                currentMaterials.forEach(m => {
+                    // Escapar comas en los valores
+                    const nombre = String(m.nombre).replace(/,/g, ';').replace(/\n/g, ' ');
+                    const proveedor = String(m.proveedor).replace(/,/g, ';').replace(/\n/g, ' ');
+                    const categoria = String(m.categoria).replace(/,/g, ';').replace(/\n/g, ' ');
+                    
+                    csv += `${m.id},${nombre},${m.precio},${categoria},${m.stock},${proveedor}\n`;
+                });
+                
+                content = csv;
+                filename = 'materiales.csv';
+                mimeType = 'text/csv;charset=utf-8;';
+            }
+            
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showMessage(`Base de datos descargada: ${filename}`, 'success');
+        }
+        
+        // Funciones de desarrollo
+        function devShowUsers() {
+            let message = `Usuarios registrados (${registeredUsers.length}):\n\n`;
+            registeredUsers.forEach((user, index) => {
+                message += `${index + 1}. ${user.nombre} (${user.tipoUsuario}) - Doc: ${user.numeroDocumento}\n`;
+            });
+            alert(message);
+        }
+        
+        function devClearData() {
+            if (confirm('¿Está seguro que desea eliminar todos los datos? Esta acción no se puede deshacer.')) {
+                localStorage.removeItem('cadenaSuministros_usuarios');
+                localStorage.removeItem('cadenaSuministros_materiales');
+                localStorage.removeItem('cadenaSuministros_sesionActiva');
+                registeredUsers = [];
+                currentMaterials = [...defaultMaterials];
+                currentUser = null;
+                location.reload();
+            }
+        }
+        
+        function devTestLogin() {
+            showRegisterForm();
+            setTimeout(() => {
+                document.getElementById('nombre').value = 'Usuario Prueba';
+                document.getElementById('tipoDocumento').value = 'cc';
+                document.getElementById('numeroDocumento').value = '99999';
+                document.getElementById('tipoUsuario').value = 'analista';
+                document.getElementById('contraseña').value = 'test123';
+                document.getElementById('confirmarContraseña').value = 'test123';
+            }, 500);
+        }
+        
+        function devDiagnoseButtons() {
+            console.log('Estado de la aplicación:', {
+                currentUser: currentUser,
+                materialsCount: currentMaterials.length,
+                usersCount: registeredUsers.length
+            });
+        }
+        
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Aplicación iniciada');
+            loadData();
+            initializeFileUpload();
+        });
+        
+        // Estilos CSS dinámicos
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            
+            .input-error {
+                border-color: #dc3545 !important;
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+            }
+            
+            .error-message {
+                color: #dc3545;
+                font-size: 0.875rem;
+                margin-top: 0.25rem;
+                display: block;
+            }
+            
+            .message {
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+            
+            .message-success {
+                background: #28a745;
+            }
+            
+            .message-error {
+                background: #dc3545;
+            }
+            
+            .message-info {
+                background: #17a2b8;
+            }
+            
+            .message-warning {
+                background: #ffc107;
+            }
+            
+            .no-materials-message {
+                text-align: center;
+                padding: 2rem;
+                background: #fff3cd;
+                border: 1px solid #ffc107;
+                border-radius: 8px;
+                color: #856404;
+                font-size: 1.1rem;
+            }
+            
+            .no-materials-message a {
+                color: #0f62fe;
+                font-weight: 600;
+            }
+            
+            .readonly-notice {
+                text-align: center;
+                padding: 1rem;
+                background: #e8f4fd;
+                border-radius: 8px;
+                color: #0f62fe;
+                margin-top: 1rem;
+            }
+            
+            .readonly-notice a {
+                font-weight: 600;
+            }
+            
+            /* Estilos para el banner de usuario */
+            .user-info {
+                display: flex;
+                align-items: center;
+                margin-left: 1rem;
+            }
+            
+            .user-button {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: rgba(255,255,255,0.2);
+                border: 1px solid rgba(255,255,255,0.3);
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: background 0.3s;
+            }
+            
+            .user-button:hover {
+                background: rgba(255,255,255,0.3);
+            }
+            
+            .user-icon {
+                font-size: 1.1rem;
+            }
+            
+            .user-arrow {
+                font-size: 0.7rem;
+                transition: transform 0.3s;
+            }
+            
+            .user-dropdown {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                min-width: 200px;
+                z-index: 1000;
+                margin-top: 0.5rem;
+            }
+            
+            .user-dropdown.show {
+                display: block;
+                animation: slideIn 0.3s ease-out;
+            }
+            
+            .user-dropdown-header {
+                padding: 1rem;
+                border-bottom: 1px solid #eee;
+                color: #333;
+            }
+            
+            .user-dropdown-header p {
+                margin: 0.3rem 0;
+                font-size: 0.9rem;
+            }
+            
+            .logout-button {
+                width: 100%;
+                padding: 0.8rem 1rem;
+                border: none;
+                background: #dc3545;
+                color: white;
+                cursor: pointer;
+                font-size: 0.9rem;
+                border-radius: 0 0 8px 8px;
+                text-align: left;
+            }
+            
+            .logout-button:hover {
+                background: #c82333;
+            }
+            
+            nav {
+                position: relative;
+            }
+            
+            .modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            }
+            
+            .modal-content {
+                background: white;
+                padding: 2rem;
+                border-radius: 8px;
+                max-width: 500px;
+                width: 90%;
+                position: relative;
+            }
+            
+            .close {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: #666;
+            }
+            
+            .close:hover {
+                color: #000;
+            }
+            
+            /* Fondo blanco para tablas de Estadística Global */
+            .stats-by-provider,
+            .stats-by-category {
+                background: white;
+                padding: 1.5rem;
+                border-radius: 8px;
+                margin-top: 2rem;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+            
+            .stats-by-provider h4,
+            .stats-by-category h4 {
+                color: #333;
+                margin-bottom: 1rem;
+                padding-bottom: 0.5rem;
+                border-bottom: 2px solid #0f62fe;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

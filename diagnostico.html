@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagnóstico - Cadena de Suministros</title>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+    <div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+        <h1>🔍 Diagnóstico de Inicio de Sesión</h1>
+        
+        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+            <h2>Paso 1: Crear Usuario de Prueba</h2>
+            <form id="testRegisterForm">
+                <div class="form-group">
+                    <label>Nombre:</label>
+                    <input type="text" id="testNombre" value="Usuario Prueba" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo Documento:</label>
+                    <select id="testTipoDoc" required>
+                        <option value="cc">Cédula de Ciudadanía</option>
+                        <option value="ce">Cédula de Extranjería</option>
+                        <option value="ti">Tarjeta de Identidad</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Número Documento:</label>
+                    <input type="text" id="testDocumento" value="99999" pattern="[0-9]{5}" maxlength="5" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo Usuario:</label>
+                    <select id="testTipoUser" required>
+                        <option value="lider">Líder De Compras</option>
+                        <option value="analista">Analista</option>
+                        <option value="desarrollador">Desarrollador</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="testPassword" value="test123" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Contraseña:</label>
+                    <input type="password" id="testConfirmPassword" value="test123" required>
+                </div>
+                <button type="submit" style="background: #28a745; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px;">1. Crear Usuario</button>
+            </form>
+        </div>
+        
+        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+            <h2>Paso 2: Iniciar Sesión</h2>
+            <form id="testLoginForm">
+                <div class="form-group">
+                    <label>Número Documento:</label>
+                    <input type="text" id="testLoginDoc" value="99999" pattern="[0-9]{5}" maxlength="5" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="testLoginPass" value="test123" required>
+                </div>
+                <button type="submit" style="background: #007bff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px;">2. Iniciar Sesión</button>
+            </form>
+        </div>
+        
+        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+            <h2>Estado Actual</h2>
+            <div id="estadoInfo">
+                <p><strong>Usuario Actual:</strong> <span id="currentUser">No autenticado</span></p>
+                <p><strong>Total Materiales:</strong> <span id="totalMateriales">Cargando...</span></p>
+                <p><strong>Total Usuarios:</strong> <span id="totalUsuarios">Cargando...</span></p>
+                <p><strong>Session Storage:</strong> <span id="sessionStorage">Vacío</span></p>
+            </div>
+            <button onclick="probarEdicion()" style="background: #ffc107; color: black; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; margin: 1rem 0;">3. Probar Edición de Materiales</button>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px;">
+            <h2>📋 Consola de Depuración</h2>
+            <div id="debugConsole" style="background: #000; color: #0f0; padding: 1rem; border-radius: 4px; height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.875rem; white-space: pre-wrap;"></div>
+            <button onclick="limpiarConsole()" style="background: #dc3545; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; margin-top: 0.5rem;">Limpiar Console</button>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        let currentUser = null;
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const consoleEl = document.getElementById('debugConsole');
+            consoleEl.textContent += `[${timestamp}] ${message}\n`;
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+            console.log(message); // También mostrar en consola del navegador
+        }
+        
+        function limpiarConsole() {
+            document.getElementById('debugConsole').textContent = '';
+        }
+        
+        function actualizarEstado() {
+            // Verificar sesión activa
+            const savedSession = localStorage.getItem('cadenaSuministros_sesionActiva');
+            if (savedSession) {
+                try {
+                    const sessionData = JSON.parse(savedSession);
+                    currentUser = sessionData.user;
+                    document.getElementById('currentUser').textContent = `${currentUser.nombre} (${currentUser.tipoUsuario})`;
+                    document.getElementById('sessionStorage').textContent = 'Sesión activa';
+                } catch (error) {
+                    document.getElementById('sessionStorage').textContent = 'Error en sesión';
+                }
+            } else {
+                document.getElementById('currentUser').textContent = 'No autenticado';
+                document.getElementById('sessionStorage').textContent = 'Vacío';
+            }
+            
+            // Actualizar estadísticas
+            try {
+                const materials = API.obtenerMateriales();
+                const users = API.obtenerUsuariosRegistrados();
+                document.getElementById('totalMateriales').textContent = materials.length;
+                document.getElementById('totalUsuarios').textContent = users.length;
+            } catch (error) {
+                document.getElementById('totalMateriales').textContent = 'Error: ' + error.message;
+                document.getElementById('totalUsuarios').textContent = 'Error';
+            }
+        }
+        
+        async function probarEdicion() {
+            log('🧪 Probando edición de materiales...');
+            
+            if (!currentUser) {
+                log('❌ No hay usuario autenticado. Inicie sesión primero.');
+                alert('❌ Debe iniciar sesión para editar materiales');
+                return;
+            }
+            
+            try {
+                // Intentar agregar un material de prueba
+                const testMaterial = {
+                    nombre: 'Material de Prueba Diagnóstico',
+                    precio: 1000,
+                    categoria: 'Materiales cementantes',
+                    stock: 50,
+                    proveedor: 'Proveedor de Prueba'
+                };
+                
+                log('📦 Intentando agregar material de prueba...');
+                const result = await API.agregarMaterial(testMaterial, currentUser);
+                
+                if (result.status === 'success') {
+                    log('✅ Material agregado exitosamente');
+                    log(`📊 ID: ${result.materialId}`);
+                    alert('✅ Éxito: Puede editar materiales. El material de prueba ha sido agregado.');
+                } else {
+                    log(`❌ Error: ${result.message}`);
+                    alert(`❌ Error: ${result.message}`);
+                }
+            } catch (error) {
+                log(`❌ Error de API: ${error.message}`);
+                alert(`❌ Error de API: ${error.message}`);
+            }
+            
+            actualizarEstado();
+        }
+        
+        // Formulario de registro
+        document.getElementById('testRegisterForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const userData = {
+                nombre: document.getElementById('testNombre').value,
+                tipoDocumento: document.getElementById('testTipoDoc').value,
+                numeroDocumento: document.getElementById('testDocumento').value,
+                tipoUsuario: document.getElementById('testTipoUser').value,
+                contraseña: document.getElementById('testPassword').value
+            };
+            
+            log('📝 Intentando registrar usuario...');
+            log(`📋 Datos: ${JSON.stringify(userData, null, 2)}`);
+            
+            try {
+                const result = await API.guardarUsuario(userData);
+                log(`📊 Resultado: ${JSON.stringify(result, null, 2)}`);
+                
+                if (result.status === 'ok') {
+                    log('✅ Usuario registrado exitosamente');
+                    alert('✅ Usuario registrado. Ahora puede iniciar sesión.');
+                } else {
+                    log(`❌ Error en registro: ${result.message}`);
+                    alert(`❌ Error: ${result.message}`);
+                }
+            } catch (error) {
+                log(`❌ Error de API: ${error.message}`);
+                alert(`❌ Error: ${error.message}`);
+            }
+            
+            actualizarEstado();
+        });
+        
+        // Formulario de login
+        document.getElementById('testLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const documento = document.getElementById('testLoginDoc').value;
+            const contraseña = document.getElementById('testLoginPass').value;
+            
+            log('🔑 Intentando iniciar sesión...');
+            log(`📋 Credenciales: ${documento} / ${contraseña.length} caracteres`);
+            
+            try {
+                const result = await API.autenticarUsuario(documento, contraseña);
+                log(`📊 Resultado: ${JSON.stringify(result, null, 2)}`);
+                
+                if (result.status === 'ok') {
+                    currentUser = result.user;
+                    log(`✅ Sesión iniciada: ${currentUser.nombre}`);
+                    
+                    // Guardar sesión
+                    const sessionData = {
+                        user: currentUser,
+                        loginTime: Date.now()
+                    };
+                    localStorage.setItem('cadenaSuministros_sesionActiva', JSON.stringify(sessionData));
+                    
+                    alert(`✅ ¡Bienvenido ${currentUser.nombre}! Sesión iniciada correctamente.`);
+                } else {
+                    log(`❌ Error en login: ${result.message}`);
+                    alert(`❌ Error: ${result.message}`);
+                }
+            } catch (error) {
+                log(`❌ Error de API: ${error.message}`);
+                alert(`❌ Error: ${error.message}`);
+            }
+            
+            actualizarEstado();
+        });
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            log('🚀 Página de diagnóstico cargada');
+            log('📦 Verificando estado inicial...');
+            actualizarEstado();
+        });
+    </script>
+</body>
+</html>

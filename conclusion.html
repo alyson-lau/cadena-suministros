@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadena de Suministros - Conclusión</title>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+    <header>
+        <p><strong>CADENA DE SUMINISTROS</strong></p>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="acceso.html">Acceso</a></li>
+                <li><a href="tipodeusuario.html">Tipo de Usuario</a></li>
+                <li><a href="conclusion.html" class="active">Conclusión</a></li>
+                <li><a href="bibliografia.html">Bibliografía</a></li>
+                <li><a href="navegacion.html">Mapa de Navegación</a></li>
+                <li>
+                    <div class="user-info" id="userInfo" style="display: none;">
+                        <button class="user-button" onclick="toggleUserMenu()">
+                            <span class="user-icon">👤</span>
+                            <span class="user-name" id="headerUserName">Usuario</span>
+                            <span class="user-arrow">▼</span>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="user-dropdown-header">
+                                <p><strong>Nombre:</strong> <span id="dropdownUserName">-</span></p>
+                                <p><strong>Rol:</strong> <span id="dropdownUserRole">-</span></p>
+                            </div>
+                            <button class="logout-button" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="dev-tools" style="display: none;" id="devTools">
+                <button onclick="devShowUsers()">👥 Ver Usuarios</button>
+                <button onclick="devClearData()">🗑️ Limpiar Datos</button>
+                <button onclick="devDiagnoseButtons()">🔍 Diagnosticar Botones</button>
+                <button onclick="devTestLogin()">🧪 Test Login</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="conclusion">
+            <h2>Conclusión</h2>
+            
+            <div class="conclusion-content">
+                <p>
+                La adopción de un sistema estructurado para la gestión de compras de materiales permite anticipar riesgos como sobrecostos, desabastecimiento y decisiones poco justificadas, reduciendo errores en el manejo del presupuesto del proyecto. Apoyado en herramientas tecnológicas, este enfoque facilita la optimización de recursos, la reducción de tiempos, el fortalecimiento de la relación con proveedores y una mayor transparencia para todos los actores involucrados.
+            </p>
+            <p>
+                La combinación de una visión estratégica con el uso adecuado de tecnología resulta determinante para el desarrollo exitoso de proyectos de construcción complejos. Su impacto se refleja tanto en la eficiencia financiera como en la calidad y sostenibilidad del resultado final, especialmente en la ejecución de locales comerciales y apartamentos dentro de un edificio multifuncional.
+            </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Cadena de Suministros | Excelencia como estándar, compromiso como principio.</p>
+        <p>Autora: Aleydys Laura Morales</p>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/shared.js"></script>
+    <script>
+        // Verificar si hay sesión activa
+        document.addEventListener('DOMContentLoaded', () => {
+            checkActiveSession();
+        });
+    </script>
+</body>
+</html>

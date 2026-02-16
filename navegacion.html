@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadena de Suministros - Mapa de Navegación</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        .nav-map {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+        
+        .nav-level {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .nav-level-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--azul);
+            padding: 0.5rem 1.5rem;
+            background: #e8f0fe;
+            border-radius: var(--radius);
+        }
+        
+        .nav-nodes {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            background: white;
+            border: 2px solid var(--azul);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--texto);
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-card:hover {
+            background: var(--azul);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(15, 98, 254, 0.3);
+        }
+        
+        .nav-card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-card-title {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .nav-card-desc {
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 0.8;
+        }
+        
+        .nav-arrow {
+            font-size: 1.5rem;
+            color: var(--azul);
+        }
+        
+        .nav-line {
+            width: 2px;
+            height: 30px;
+            background: var(--azul);
+        }
+        
+        .usability-section, .accessibility-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--azul);
+        }
+        
+        .usability-section h3, .accessibility-section h3 {
+            color: var(--azul);
+            margin-top: 0;
+        }
+        
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        
+        .checklist-item.ok::before {
+            content: "✓";
+            color: green;
+            font-weight: bold;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .legend-public { background: #4caf50; }
+        .legend-auth { background: #ff9800; }
+        .legend-admin { background: #f44336; }
+        
+        @media (max-width: 768px) {
+            .nav-nodes {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <p><strong>CADENA DE SUMINISTROS</strong></p>
+        <nav aria-label="Navegación principal">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="acceso.html">Acceso</a></li>
+                <li><a href="tipodeusuario.html">Tipo de Usuario</a></li>
+                <li><a href="conclusion.html">Conclusión</a></li>
+                <li><a href="bibliografia.html">Bibliografía</a></li>
+                <li><a href="navegacion.html" class="active">Mapa de Navegación</a></li>
+                <li>
+                    <div class="user-info" id="userInfo" style="display: none;">
+                        <button class="user-button" onclick="toggleUserMenu()" aria-label="Menú de usuario">
+                            <span class="user-icon">👤</span>
+                            <span class="user-name" id="headerUserName">Usuario</span>
+                            <span class="user-arrow">▼</span>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="user-dropdown-header">
+                                <p><strong>Nombre:</strong> <span id="dropdownUserName">-</span></p>
+                                <p><strong>Rol:</strong> <span id="dropdownUserRole">-</span></p>
+                            </div>
+                            <button class="logout-button" onclick="cerrarSesion()">Cerrar Sesión</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Mapa de Navegación</h2>
+            <p>Este mapa muestra la estructura de navegación del prototipo de la aplicación web "Cadena de Suministros", diseñada para la gestión de materiales de construcción.</p>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color legend-public"></div>
+                    <span>Página Pública</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-auth"></div>
+                    <span>Requiere Autenticación</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-admin"></div>
+                    <span>Administración</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="nav-map" aria-label="Diagrama de navegación">
+            <div class="nav-level">
+                <div class="nav-level-title">Nivel 1 - Páginas Públicas</div>
+                <div class="nav-nodes">
+                    <div class="nav-node">
+                        <a href="index.html" class="nav-card">
+                            <span class="nav-card-icon">🏠</span>
+                            <span class="nav-card-title">Inicio</span>
+                            <span class="nav-card-desc">Página principal con información del proyecto</span>
+                        </a>
+                    </div>
+                    <div class="nav-node">
+                        <a href="acceso.html" class="nav-card">
+                            <span class="nav-card-icon">🔐</span>
+                            <span class="nav-card-title">Acceso</span>
+                            <span class="nav-card-desc">Login y registro de usuarios</span>
+                        </a>
+                    </div>
+                    <div class="nav-node">
+                        <a href="conclusion.html" class="nav-card">
+                            <span class="nav-card-icon">📝</span>
+                            <span class="nav-card-title">Conclusión</span>
+                            <span class="nav-card-desc">Resultados y conclusiones del proyecto</span>
+                        </a>
+                    </div>
+                    <div class="nav-node">
+                        <a href="bibliografia.html" class="nav-card">
+                            <span class="nav-card-icon">📚</span>
+                            <span class="nav-card-title">Bibliografía</span>
+                            <span class="nav-card-desc">Referencias y fuentes consultadas</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-arrow">↓</div>
+            
+            <div class="nav-level">
+                <div class="nav-level-title">Nivel 2 - Autenticación</div>
+                <div class="nav-nodes">
+                    <div class="nav-node">
+                        <a href="tipodeusuario.html" class="nav-card">
+                            <span class="nav-card-icon">👤</span>
+                            <span class="nav-card-title">Tipo de Usuario</span>
+                            <span class="nav-card-desc">Panel principal después del login</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-arrow">↓</div>
+            
+            <div class="nav-level">
+                <div class="nav-level-title">Nivel 3 - Identificación del Roles</div>
+                <div class="nav-nodes">
+                    <div class="nav-node">
+                        <a href="tipodeusuario.html#lider" class="nav-card" style="border-color: #ff9800;">
+                            <span class="nav-card-icon">👔</span>
+                            <span class="nav-card-title">Panel Líder</span>
+                            <span class="nav-card-desc">Gestión de proveedores y pedidos</span>
+                        </a>
+                    </div>
+                    <div class="nav-node">
+                        <a href="tipodeusuario.html#analista" class="nav-card" style="border-color: #ff9800;">
+                            <span class="nav-card-icon">📊</span>
+                            <span class="nav-card-title">Panel Analista</span>
+                            <span class="nav-card-desc">Estadísticas y reportes</span>
+                        </a>
+                    </div>
+                    <div class="nav-node">
+                        <a href="tipodeusuario.html#desarrollador" class="nav-card" style="border-color: #ff9800;">
+                            <span class="nav-card-icon">💻</span>
+                            <span class="nav-card-title">Panel Desarrollador</span>
+                            <span class="nav-card-desc">Desarrollo y pruebas</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-arrow">↓</div>
+            
+            <div class="nav-level">
+                <div class="nav-level-title">Nivel 4 - Gestión de Materiales</div>
+                <div class="nav-nodes">
+                    <div class="nav-node">
+                        <div class="nav-card" style="border-color: #4caf50;">
+                            <span class="nav-card-icon">📦</span>
+                            <span class="nav-card-title">Inventario</span>
+                            <span class="nav-card-desc">Lista de materiales disponibles</span>
+                        </div>
+                    </div>
+                    <div class="nav-node">
+                        <div class="nav-card" style="border-color: #4caf50;">
+                            <span class="nav-card-icon">➕</span>
+                            <span class="nav-card-title">Agregar</span>
+                            <span class="nav-card-desc">Registrar nuevos materiales</span>
+                        </div>
+                    </div>
+                    <div class="nav-node">
+                        <div class="nav-card" style="border-color: #4caf50;">
+                            <span class="nav-card-icon">📤</span>
+                            <span class="nav-card-title">Cargar CSV</span>
+                            <span class="nav-card-desc">Importar base de datos</span>
+                        </div>
+                    </div>
+                    <div class="nav-node">
+                        <div class="nav-card" style="border-color: #4caf50;">
+                            <span class="nav-card-icon">📥</span>
+                            <span class="nav-card-title">Exportar</span>
+                            <span class="nav-card-desc">Descargar base de datos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="usability-section">
+            <h3>Reglas de Usabilidad Cumplidas</h3>
+            <div class="checklist">
+                <div class="checklist-item ok">Navegación consistente en todas las páginas</div>
+                <div class="checklist-item ok">Feedback visual al interacturar con elementos</div>
+                <div class="checklist-item ok">Diseño intuitivo con iconos representativos</div>
+                <div class="checklist-item ok">Mensajes de error claros y oportunos</div>
+                <div class="checklist-item ok">Tiempo de respuesta rápido</div>
+                <div class="checklist-item ok">Ayuda contextual disponible</div>
+                <div class="checklist-item ok">Diseño responsive para múltiples dispositivos</div>
+                <div class="checklist-item ok">Jerarquía visual clara</div>
+            </div>
+        </section>
+
+        <section class="accessibility-section">
+            <h3>Reglas de Accesibilidad Cumplidas</h3>
+            <div class="checklist">
+                <div class="checklist-item ok">Contraste de colores adecuado (WCAG AA)</div>
+                <div class="checklist-item ok">Textos alternativos en imágenes</div>
+                <div class="checklist-item ok">Navegación por teclado funcional</div>
+                <div class="checklist-item ok">Etiquetas ARIA en componentes dinámicos</div>
+                <div class="checklist-item ok">Estructura semántica HTML5 (header, nav, main, footer)</div>
+                <div class="checklist-item ok">Atributos lang definidos</div>
+                <div class="checklist-item ok">Formularios con etiquetas asociadas</div>
+                <div class="checklist-item ok">Sin contenido que parpadee más de 3 veces/segundo</div>
+            </div>
+        </section>
+
+        <section>
+            <h3>Estadísticas del Prototipo</h3>
+            <ul>
+                <li><strong>Páginas creadas:</strong> 8 (Inicio, Acceso, Tipo de Usuario, Conclusión, Bibliografía, Navegación, Diagnóstico, Limpiar)</li>
+                <li><strong>Roles de usuario:</strong> 3 (Líder de Compras, Analista, Desarrollador)</li>
+                <li><strong>Tecnologías:</strong> HTML5, CSS3, JavaScript (Vanilla)</li>
+                <li><strong>Materiales precargados:</strong> 50+ datos sobre materiales de construcción</li>
+                <li><strong>Formato de datos:</strong> CSV para importación</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Cadena de Suministros | Excelencia como estándar, compromiso como principio.</p>
+        <p>Autora: Aleydys Laura Morales</p>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/shared.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            checkActiveSession();
+        });
+    </script>
+</body>
+</html>

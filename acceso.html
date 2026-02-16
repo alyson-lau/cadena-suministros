@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acceso</title>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+    <header>
+        <p><strong>CADENA DE SUMINISTROS</strong></p>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="acceso.html" class="active">Acceso</a></li>
+                <li><a href="tipodeusuario.html">Tipo de Usuario</a></li>
+                <li><a href="conclusion.html">Conclusión</a></li>
+                <li><a href="bibliografia.html">Bibliografía</a></li>
+                <li><a href="navegacion.html">Mapa de Navegación</a></li>
+                <li>
+                    <div class="user-info" id="userInfo" style="display: none;">
+                        <button class="user-button" onclick="toggleUserMenu()">
+                            <span class="user-icon">👤</span>
+                            <span class="user-name" id="headerUserName">Usuario</span>
+                            <span class="user-arrow">▼</span>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="user-dropdown-header">
+                                <p><strong>Nombre:</strong> <span id="dropdownUserName">-</span></p>
+                                <p><strong>Rol:</strong> <span id="dropdownUserRole">-</span></p>
+                            </div>
+                            <button class="logout-button" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="usuario">
+            <h2>Tipo de Usuario</h2>
+            
+            <!-- Formulario de registro y autenticación -->
+            <div class="user-form" id="registerForm">
+                <h3>Registro de Usuario</h3>
+                <form id="userForm">
+                    <div class="form-group">
+                        <label for="nombre">Nombre y Apellido:</label>
+                        <input type="text" id="nombre" name="nombre" required minlength="3">
+                        <small class="form-text">Ingrese nombres y apellidos completos</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tipoDocumento">Tipo de Documento de Identidad:</label>
+                        <select id="tipoDocumento" name="tipoDocumento" required>
+                            <option value="">Seleccione...</option>
+                            <option value="cc">Cédula de Ciudadanía</option>
+                            <option value="ce">Cédula de Extranjería</option>
+                            <option value="ti">Tarjeta de Identidad</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="numeroDocumento">Número de Documento de Identidad:</label>
+                        <input type="text" id="numeroDocumento" name="numeroDocumento" required pattern="[0-9]{5,15}" maxlength="15" placeholder="12345678" title="Debe ser un número de 5 a 15 dígitos">
+                        <small class="form-text">Ingrese su número de documento de identidad</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tipoUsuario">Tipo de Usuario:</label>
+                        <select id="tipoUsuario" name="tipoUsuario" required>
+                            <option value="">Seleccione...</option>
+                            <option value="lider">Líder De Compras</option>
+                            <option value="analista">Analista</option>
+                            <option value="desarrollador">Desarrollador</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contraseña">Contraseña:</label>
+                        <input type="password" id="contraseña" name="contraseña" required minlength="6" maxlength="20">
+                        <small class="form-text">Mínimo 6 caracteres (letras, números y caracteres especiales permitidos)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmarContraseña">Confirmar Contraseña:</label>
+                        <input type="password" id="confirmarContraseña" name="confirmarContraseña" required>
+                        <small class="form-text">Debe coincidir con la contraseña</small>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit">Registrarse</button>
+                        <button type="button" onclick="showLoginForm()">¿Ya tienes cuenta? Iniciar Sesión</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Formulario de inicio de sesión -->
+            <div class="user-form" id="loginForm">
+                <h3>Iniciar Sesión</h3>
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="loginDocumento">Número de Documento:</label>
+                        <input type="text" id="loginDocumento" name="loginDocumento" required pattern="[0-9]{5,15}" maxlength="15" placeholder="12345678">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginContraseña">Contraseña:</label>
+                        <input type="password" id="loginContraseña" name="loginContraseña" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit">Iniciar Sesión</button>
+                        <button type="button" onclick="showRegisterForm()">¿No tienes cuenta? Registrarse</button>
+                    </div>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="#" onclick="showRecoveryForm(); return false;" style="color: #0f62fe; text-decoration: underline; font-size: 0.9rem;">¿Olvidaste tu contraseña?</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Formulario de recuperación de contraseña -->
+            <div class="user-form" id="recoveryForm" style="display: none;">
+                <h3>🔐 Recuperar Contraseña</h3>
+                <p style="margin-bottom: 1rem; color: #666;">Ingresa tu número de documento para recuperar tu contraseña.</p>
+                <form id="recoveryFormElement">
+                    <div class="form-group">
+                        <label for="recoveryDocumento">Número de Documento:</label>
+                        <input type="text" id="recoveryDocumento" name="recoveryDocumento" required pattern="[0-9]{5,15}" maxlength="15" placeholder="12345678">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit">Recuperar Contraseña</button>
+                        <button type="button" onclick="showLoginForm()">Volver al Login</button>
+                    </div>
+                </form>
+                
+                <div id="recoveryResult" style="display: none; margin-top: 1.5rem; padding: 1rem; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <h4 style="color: #155724; margin-bottom: 0.5rem;">✅ Datos de tu cuenta</h4>
+                    <p><strong>Nombre:</strong> <span id="recoveryNombre"></span></p>
+                    <p><strong>Contraseña:</strong> <span id="recoveryPassword" style="font-family: monospace; background: #fff; padding: 0.2rem 0.5rem; border-radius: 4px;"></span></p>
+                    <p style="margin-top: 1rem; font-size: 0.85rem; color: #666;">Por seguridad, te recomendamos anotar tu contraseña y guardarla en un lugar seguro.</p>
+                </div>
+            </div>                       
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Cadena de Suministros | Excelencia como estándar, compromiso como principio.</p>
+        <p>Autora: Aleydys Laura Morales</p>
+    </footer>
+
+    <script>
+        // ===================
+        // VERSIÓN SIMPLIFICADA DIRECTAMENTE EN HTML
+        // ===================
+        
+        let currentUser = null;
+        let currentMaterials = [];
+        
+        // Materiales por defecto para pruebas
+        const defaultMaterials = [
+            { id: 1, nombre: "Cemento gris", precio: 32000, categoria: "Materiales cementantes", stock: 100, proveedor: "Cemex Colombia" },
+            { id: 2, nombre: "Varilla de acero", precio: 28000, categoria: "Estructurales", stock: 50, proveedor: "Acerías Paz del Río" },
+            { id: 3, nombre: "Ladrillo cerámico", precio: 850, categoria: "Mampostería", stock: 1000, proveedor: "Cerámicas Andina" },
+            { id: 4, nombre: "Arena gruesa", precio: 15000, categoria: "Agregados", stock: 500, proveedor: "Canteras del Río" },
+            { id: 5, nombre: "Bloque de concreto", precio: 2500, categoria: "Mampostería", stock: 800, proveedor: "Prefabricados Nacional" },
+            { id: 6, nombre: "Acero corrugado", precio: 29000, categoria: "Estructurales", stock: 40, proveedor: "Acerías Paz del Río" }
+        ];
+        
+        // Usuarios registrados
+        let registeredUsers = [];
+        
+        // Cargar datos desde localStorage
+        function loadData() {
+            try {
+                const savedUsers = localStorage.getItem('cadenaSuministros_usuarios');
+                if (savedUsers) {
+                    registeredUsers = JSON.parse(savedUsers);
+                }
+                
+                const savedMaterials = localStorage.getItem('cadenaSuministros_materiales');
+                if (savedMaterials) {
+                    currentMaterials = JSON.parse(savedMaterials);
+                } else {
+                    currentMaterials = defaultMaterials;
+                    saveMaterials();
+                }
+                
+                const savedSession = localStorage.getItem('cadenaSuministros_sesionActiva');
+                if (savedSession) {
+                    const sessionData = JSON.parse(savedSession);
+                    const sessionAge = Date.now() - sessionData.loginTime;
+                    const maxSessionAge = 24 * 60 * 60 * 1000; // 24 horas
+                    
+                    if (sessionAge < maxSessionAge) {
+                        currentUser = sessionData.user;
+                        showDatabaseInterface();
+                        showUserBanner();
+                        showMessage(`Bienvenido de vuelta, ${currentUser.nombre}!`, 'success');
+                    } else {
+                        localStorage.removeItem('cadenaSuministros_sesionActiva');
+                    }
+                }
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+            }
+        }
+        
+        // Guardar datos
+        function saveUsers() {
+            try {
+                localStorage.setItem('cadenaSuministros_usuarios', JSON.stringify(registeredUsers));
+            } catch (error) {
+                console.error('Error guardando usuarios:', error);
+            }
+        }
+        
+        function saveMaterials() {
+            try {
+                localStorage.setItem('cadenaSuministros_materiales', JSON.stringify(currentMaterials));
+            } catch (error) {
+                console.error('Error guardando materiales:', error);
+            }
+        }
+        
+        // Mostrar mensaje
+        function showMessage(message, type = 'info') {
+            const messageEl = document.createElement('div');
+            messageEl.className = `message message-${type}`;
+            messageEl.textContent = message;
+            messageEl.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+            `;
+            
+            const colors = {
+                success: '#28a745',
+                error: '#dc3545',
+                info: '#17a2b8',
+                warning: '#ffc107'
+            };
+            
+            messageEl.style.backgroundColor = colors[type] || colors.info;
+            
+            document.body.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    if (messageEl.parentNode) {
+                        messageEl.parentNode.removeChild(messageEl);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        function showUserBanner() {
+            const userInfo = document.getElementById('userInfo');
+            if (currentUser && userInfo) {
+                userInfo.style.display = 'flex';
+                document.getElementById('headerUserName').textContent = currentUser.nombre;
+                document.getElementById('dropdownUserName').textContent = currentUser.nombre;
+                
+                const roleNames = {
+                    'lider': 'Líder de Compras',
+                    'analista': 'Analista',
+                    'desarrollador': 'Desarrollador'
+                };
+                document.getElementById('dropdownUserRole').textContent = roleNames[currentUser.tipoUsuario] || currentUser.tipoUsuario;
+            }
+        }
+        
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('show');
+        }
+        
+        function cerrarSesion() {
+            if (confirm('¿Está seguro que desea cerrar sesión?')) {
+                localStorage.removeItem('cadenaSuministros_sesionActiva');
+                currentUser = null;
+                location.reload();
+            }
+        }
+        
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            const userInfo = document.getElementById('userInfo');
+            const dropdown = document.getElementById('userDropdown');
+            if (userInfo && !userInfo.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+        
+        // Navegación entre formularios
+        function showLoginForm() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('recoveryForm').style.display = 'none';
+            document.getElementById('recoveryResult').style.display = 'none';
+            
+            // Pre-llenar con último usuario
+            if (registeredUsers.length > 0) {
+                document.getElementById('loginDocumento').value = registeredUsers[registeredUsers.length - 1].numeroDocumento;
+            }
+        }
+        
+        function showRegisterForm() {
+            document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('recoveryForm').style.display = 'none';
+        }
+        
+        function showRecoveryForm() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('recoveryForm').style.display = 'block';
+            document.getElementById('recoveryResult').style.display = 'none';
+            document.getElementById('recoveryFormElement').reset();
+        }
+        
+        function showDatabaseInterface() {
+            // Redirigir a tipodeusuario.html cuando hay sesión activa
+            window.location.href = 'tipodeusuario.html';
+        }
+        
+        // Registro de usuario
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            console.log('Registrando usuario...');
+            
+            const nombre = document.getElementById('nombre').value.trim();
+            const tipoDocumento = document.getElementById('tipoDocumento').value;
+            const numeroDocumento = document.getElementById('numeroDocumento').value.trim();
+            const tipoUsuario = document.getElementById('tipoUsuario').value;
+            const contraseña = document.getElementById('contraseña').value;
+            const confirmarContraseña = document.getElementById('confirmarContraseña').value;
+            
+            console.log('Nombre:', nombre);
+            console.log('Tipo documento:', tipoDocumento);
+            console.log('Número documento:', numeroDocumento);
+            console.log('Tipo usuario:', tipoUsuario);
+            
+            // Validaciones
+            if (!nombre || nombre.length < 3) {
+                showMessage('El nombre debe tener al menos 3 caracteres', 'error');
+                return;
+            }
+            
+            if (!tipoDocumento) {
+                showMessage('Seleccione un tipo de documento', 'error');
+                return;
+            }
+            
+            if (!/^[0-9]{5,15}$/.test(numeroDocumento)) {
+                showMessage('El número de documento debe tener entre 5 y 15 dígitos', 'error');
+                return;
+            }
+            
+            if (!tipoUsuario) {
+                showMessage('Seleccione un tipo de usuario', 'error');
+                return;
+            }
+            
+            if (!contraseña || contraseña.length < 6) {
+                showMessage('La contraseña debe tener al menos 6 caracteres', 'error');
+                return;
+            }
+            
+            if (contraseña !== confirmarContraseña) {
+                showMessage('Las contraseñas no coinciden', 'error');
+                return;
+            }
+            
+            // Verificar duplicado
+            const existingUser = registeredUsers.find(u => u.numeroDocumento === numeroDocumento);
+            if (existingUser) {
+                showMessage('Ya existe un usuario con este número de documento', 'error');
+                return;
+            }
+            
+            // Crear usuario
+            const newUser = {
+                id: Date.now(),
+                nombre,
+                tipoDocumento,
+                numeroDocumento,
+                tipoUsuario,
+                contraseña,
+                createdAt: new Date().toISOString()
+            };
+            
+            registeredUsers.push(newUser);
+            saveUsers();
+            
+            showMessage('Usuario registrado correctamente. Ahora puede iniciar sesión.', 'success');
+            document.getElementById('userForm').reset();
+            
+            // Mostrar formulario de login para que pueda iniciar sesión
+            showLoginForm();
+        });
+        
+        // Login de usuario
+        document.getElementById('loginFormElement').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            console.log('Intentando login...');
+            console.log('Usuarios registrados:', registeredUsers);
+            
+            const documento = document.getElementById('loginDocumento').value.trim();
+            const contraseña = document.getElementById('loginContraseña').value;
+            
+            console.log('Documento:', documento);
+            
+            if (!documento) {
+                showMessage('Ingrese su número de documento', 'error');
+                return;
+            }
+            
+            if (!/^[0-9]{5,15}$/.test(documento)) {
+                showMessage('El número de documento debe tener entre 5 y 15 dígitos', 'error');
+                return;
+            }
+            
+            if (!contraseña) {
+                showMessage('Ingrese su contraseña', 'error');
+                return;
+            }
+            
+            // Buscar usuario
+            console.log('Buscando usuario con documento:', documento);
+            const user = registeredUsers.find(u => u.numeroDocumento === documento && u.contraseña === contraseña);
+            console.log('Usuario encontrado:', user);
+            
+            if (!user) {
+                showMessage('Documento o contraseña incorrectos', 'error');
+                return;
+            }
+            
+            // Iniciar sesión
+            currentUser = {
+                id: user.id,
+                nombre: user.nombre,
+                tipoUsuario: user.tipoUsuario,
+                numeroDocumento: user.numeroDocumento
+            };
+            
+            // Guardar sesión
+            const sessionData = {
+                user: currentUser,
+                loginTime: Date.now()
+            };
+            localStorage.setItem('cadenaSuministros_sesionActiva', JSON.stringify(sessionData));
+            
+            showMessage(`¡Bienvenido ${currentUser.nombre}! Redirigiendo...`, 'success');
+            
+            // Redirigir a la página de Tipo de Usuario después de 1.5 segundos
+            setTimeout(() => {
+                window.location.href = 'tipodeusuario.html';
+            }, 1500);
+        });
+        
+        // Recuperación de contraseña
+        document.getElementById('recoveryFormElement').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const documento = document.getElementById('recoveryDocumento').value.trim();
+            
+            if (!documento) {
+                showMessage('Ingrese su número de documento', 'error');
+                return;
+            }
+            
+            if (!/^[0-9]{5,15}$/.test(documento)) {
+                showMessage('El número de documento debe tener entre 5 y 15 dígitos', 'error');
+                return;
+            }
+            
+            // Buscar usuario
+            const user = registeredUsers.find(u => u.numeroDocumento === documento);
+            
+            if (!user) {
+                showMessage('No se encontró ningún usuario con ese número de documento', 'error');
+                return;
+            }
+            
+            // Mostrar resultado
+            document.getElementById('recoveryNombre').textContent = user.nombre;
+            document.getElementById('recoveryPassword').textContent = user.contraseña;
+            document.getElementById('recoveryResult').style.display = 'block';
+            
+            showMessage('Contraseña recuperada exitosamente', 'success');
+        });
+        
+        // Mostrar materiales
+        function displayMaterials(materials = currentMaterials) {
+            const databaseContent = document.getElementById('databaseContent');
+            
+            if (materials.length === 0) {
+                databaseContent.innerHTML = '<div class="no-materials">No hay materiales registrados</div>';
+                return;
+            }
+            
+            const tableHTML = `
+                <div class="materials-table-container">
+                    <table class="materials-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Categoría</th>
+                                <th>Stock</th>
+                                <th>Proveedor</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${materials.map(material => `
+                                <tr class="material-row">
+                                    <td class="material-name">${material.nombre}</td>
+                                    <td class="material-price">$${material.precio.toLocaleString('es-CO')}</td>
+                                    <td class="material-category">${material.categoria}</td>
+                                    <td class="material-stock ${material.stock <= 10 ? 'low-stock' : ''}">${material.stock}</td>
+                                    <td class="material-provider">${material.proveedor}</td>
+                                    <td class="material-actions">
+                                        <button onclick="editMaterial(${material.id})" class="btn-edit">✏️</button>
+                                        <button onclick="deleteMaterial(${material.id})" class="btn-delete">🗑️</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            databaseContent.innerHTML = tableHTML;
+        }
+        
+        // Actualizar estadísticas
+        function updateStatistics() {
+            document.getElementById('totalMaterials').textContent = currentMaterials.length;
+            document.getElementById('totalValue').textContent = `$${currentMaterials.reduce((sum, m) => sum + m.precio, 0).toLocaleString('es-CO')}`;
+            document.getElementById('totalCategories').textContent = [...new Set(currentMaterials.map(m => m.categoria))].length;
+            document.getElementById('lowStock').textContent = currentMaterials.filter(m => m.stock <= 10).length;
+        }
+        
+        // CRUD de materiales
+        function addMaterial(material) {
+            material.id = Date.now();
+            currentMaterials.push(material);
+            saveMaterials();
+            displayMaterials();
+            updateStatistics();
+            showMessage('Material agregado correctamente', 'success');
+        }
+        
+        function editMaterial(id) {
+            const material = currentMaterials.find(m => m.id === id);
+            if (material && confirm(`¿Editar "${material.nombre}"?`)) {
+                const newPrice = prompt('Nuevo precio:', material.precio);
+                if (newPrice && !isNaN(newPrice)) {
+                    material.precio = parseFloat(newPrice);
+                    saveMaterials();
+                    displayMaterials();
+                    updateStatistics();
+                    showMessage('Material actualizado correctamente', 'success');
+                }
+            }
+        }
+        
+        function deleteMaterial(id) {
+            const index = currentMaterials.findIndex(m => m.id === id);
+            if (index !== -1) {
+                const material = currentMaterials[index];
+                if (confirm(`¿Eliminar "${material.nombre}"?`)) {
+                    currentMaterials.splice(index, 1);
+                    saveMaterials();
+                    displayMaterials();
+                    updateStatistics();
+                    showMessage('Material eliminado correctamente', 'success');
+                }
+            }
+        }
+        
+        // Descargar base de datos
+        function downloadDatabase(format) {
+            let content, filename, mimeType;
+            
+            if (format === 'csv') {
+                const headers = ['ID', 'Nombre', 'Precio', 'Categoría', 'Stock', 'Proveedor'];
+                const rows = currentMaterials.map(m => 
+                    [m.id, m.nombre, m.precio, m.categoria, m.stock, m.proveedor].join(',')
+                );
+                content = [headers.join(','), ...rows].join('\n');
+                filename = 'materiales.csv';
+                mimeType = 'text/csv';
+            }
+            
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showMessage(`Base de datos descargada: ${filename}`, 'success');
+        }
+        
+        // Cerrar sesión
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('cadenaSuministros_sesionActiva');
+            document.getElementById('databaseSection').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            showMessage('Sesión cerrada correctamente', 'info');
+        }
+        
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            
+            // Búsqueda
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase();
+                    const filtered = currentMaterials.filter(m => 
+                        m.nombre.toLowerCase().includes(query) ||
+                        m.categoria.toLowerCase().includes(query) ||
+                        m.proveedor.toLowerCase().includes(query)
+                    );
+                    displayMaterials(filtered);
+                });
+            }
+            
+            // Actualizar
+            const refreshBtn = document.getElementById('refreshBtn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', () => {
+                    displayMaterials();
+                    updateStatistics();
+                    showMessage('Base de datos actualizada', 'info');
+                });
+            }
+            
+            // Agregar material
+            const addMaterialBtn = document.getElementById('addMaterialBtn');
+            if (addMaterialBtn) {
+                addMaterialBtn.addEventListener('click', () => {
+                    const name = prompt('Nombre del material:');
+                    if (!name) return;
+                    
+                    const price = prompt('Precio:');
+                    if (!price || isNaN(price)) return;
+                    
+                    const category = prompt('Categoría:');
+                    if (!category) return;
+                    
+                    const stock = prompt('Stock:');
+                    if (!stock || isNaN(stock)) return;
+                    
+                    const provider = prompt('Proveedor:');
+                    if (!provider) return;
+                    
+                    addMaterial({
+                        nombre: name,
+                        precio: parseFloat(price),
+                        categoria: category,
+                        stock: parseInt(stock),
+                        proveedor: provider
+                    });
+                });
+            }
+        });
+        
+        // Estilos animación
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            
+            /* Estilos para el banner de usuario */
+            .user-info {
+                display: flex;
+                align-items: center;
+                margin-left: 1rem;
+            }
+            
+            .user-button {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: rgba(255,255,255,0.2);
+                border: 1px solid rgba(255,255,255,0.3);
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                transition: background 0.3s;
+            }
+            
+            .user-button:hover {
+                background: rgba(255,255,255,0.3);
+            }
+            
+            .user-icon {
+                font-size: 1.1rem;
+            }
+            
+            .user-arrow {
+                font-size: 0.7rem;
+                transition: transform 0.3s;
+            }
+            
+            .user-dropdown {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                min-width: 200px;
+                z-index: 1000;
+                margin-top: 0.5rem;
+            }
+            
+            .user-dropdown.show {
+                display: block;
+                animation: slideIn 0.3s ease-out;
+            }
+            
+            .user-dropdown-header {
+                padding: 1rem;
+                border-bottom: 1px solid #eee;
+                color: #333;
+            }
+            
+            .user-dropdown-header p {
+                margin: 0.3rem 0;
+                font-size: 0.9rem;
+            }
+            
+            .logout-button {
+                width: 100%;
+                padding: 0.8rem 1rem;
+                border: none;
+                background: #dc3545;
+                color: white;
+                cursor: pointer;
+                font-size: 0.9rem;
+                border-radius: 0 0 8px 8px;
+                text-align: left;
+            }
+            
+            .logout-button:hover {
+                background: #c82333;
+            }
+            
+            nav {
+                position: relative;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

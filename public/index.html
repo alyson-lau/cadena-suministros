@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="cadenaSuministrosApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadena de Suministros</title>
+    
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        :root {
+            --azul: #0f62fe;
+            --gris: #f4f4f4;
+            --texto: #333;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        main {
+            flex: 1;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        header {
+            background: var(--azul);
+            padding: 1rem;
+        }
+        
+        nav {
+            background: transparent;
+            box-shadow: none;
+        }
+        
+        nav ul a {
+            color: white !important;
+        }
+        
+        nav ul a.active {
+            background: rgba(255,255,255,0.2) !important;
+            border-radius: 4px;
+        }
+        
+        .section {
+            background: var(--gris);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .card {
+            border-radius: 8px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-left: 1rem;
+        }
+        
+        .user-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 200px;
+            z-index: 1000;
+        }
+        
+        .user-dropdown.show {
+            display: block;
+        }
+        
+        .material-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .stats-card h5 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--azul);
+        }
+        
+        .low-stock {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: var(--azul) !important;
+        }
+        
+        footer {
+            background: var(--azul);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 0.875rem;
+        }
+        
+        .success-message {
+            color: green;
+        }
+    </style>
+</head>
+<body ng-controller="MainController">
+    <header>
+        <div class="container">
+            <div class="row" style="margin: 0;">
+                <div class="col s12 center-align">
+                    <h4 style="margin: 0;">CADENA DE SUMINISTROS</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <nav>
+                        <div class="nav-wrapper">
+                            <ul class="center hide-on-med-and-down">
+                                <li><a href="#/!" class="active">Inicio</a></li>
+                                <li><a href="#!/acceso">Acceso</a></li>
+                                <li><a href="#!/materiales">Materiales</a></li>
+                                <li><a href="#!/estadisticas">Estadísticas</a></li>
+                                <li ng-if="!isLoggedIn()"><a href="#!/login">Login</a></li>
+                                <li ng-if="isLoggedIn()" class="user-info">
+                                    <a class="dropdown-trigger" href="#" data-target="userDropdown">
+                                        <i class="material-icons left">person</i>
+                                        {{ currentUser.nombre }}
+                                        <i class="material-icons right">arrow_drop_down</i>
+                                    </a>
+                                    <ul id="userDropdown" class="dropdown-content">
+                                        <li><a href="#!">Rol: {{ getRoleName() }}</a></li>
+                                        <li class="divider"></li>
+                                        <li><a ng-click="logout()">Cerrar Sesión</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div ng-view></div>
+    </main>
+
+    <footer>
+        <p>© 2026 Cadena de Suministros | Excelencia como estándar, compromiso como principio.</p>
+        <p>Autora: Aleydys Laura Morales</p>
+    </footer>
+
+    <!-- AngularJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular-route.min.js"></script>
+    
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script>
+        // Inicializar dropdowns de Materialize
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdowns = document.querySelectorAll('.dropdown-trigger');
+            M.Dropdown.init(dropdowns, {
+                coverTrigger: false,
+                constrainWidth: false
+            });
+        });
+    </script>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

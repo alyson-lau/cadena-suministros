@@ -1,0 +1,102 @@
+<div class="section">
+    <h2>Acceso</h2>
+    
+    <div class="row">
+        <!-- Formulario de Registro -->
+        <div class="col s12 m6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Registro de Usuario</span>
+                    
+                    <form ng-submit="registrar()">
+                        <div class="input-field">
+                            <input type="text" id="nombre" ng-model="usuario.nombre" required>
+                            <label for="nombre">Nombre y Apellido</label>
+                        </div>
+                        
+                        <div class="input-field">
+                            <select id="tipoDocumento" ng-model="usuario.tipoDocumento" required>
+                                <option value="">Seleccione...</option>
+                                <option value="cc">Cédula de Ciudadanía</option>
+                                <option value="ce">Cédula de Extranjería</option>
+                                <option value="ti">Tarjeta de Identidad</option>
+                            </select>
+                            <label>Tipo de Documento</label>
+                        </div>
+                        
+                        <div class="input-field">
+                            <input type="text" id="numeroDocumento" ng-model="usuario.numeroDocumento" required pattern="[0-9]{5,15}">
+                            <label for="numeroDocumento">Número de Documento</label>
+                        </div>
+                        
+                        <div class="input-field">
+                            <select id="tipoUsuario" ng-model="usuario.tipoUsuario" required>
+                                <option value="">Seleccione...</option>
+                                <option value="lider">Líder de Compras</option>
+                                <option value="analista">Analista</option>
+                                <option value="desarrollador">Desarrollador</option>
+                            </select>
+                            <label>Tipo de Usuario</label>
+                        </div>
+                        
+                        <div class="input-field">
+                            <input type="password" id="contraseña" ng-model="usuario.contraseña" required minlength="6">
+                            <label for="contraseña">Contraseña</label>
+                        </div>
+                        
+                        <div class="input-field">
+                            <input type="password" id="confirmarContraseña" ng-model="usuario.confirmarContraseña" required>
+                            <label for="confirmarContraseña">Confirmar Contraseña</label>
+                        </div>
+                        
+                        <p class="error-message" ng-if="error">{{ error }}</p>
+                        
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">
+                            Registrarse
+                            <i class="material-icons right">person_add</i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Formulario de Login -->
+        <div class="col s12 m6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Iniciar Sesión</span>
+                    
+                    <form ng-submit="login()">
+                        <div class="input-field">
+                            <input type="text" id="loginDocumento" ng-model="usuario.numeroDocumento" required>
+                            <label for="loginDocumento">Número de Documento</label>
+                        </div>
+                        
+                        <div class="input-field">
+                            <input type="password" id="loginContraseña" ng-model="usuario.contraseña" required>
+                            <label for="loginContraseña">Contraseña</label>
+                        </div>
+                        
+                        <p class="error-message" ng-if="error">{{ error }}</p>
+                        
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">
+                            Iniciar Sesión
+                            <i class="material-icons right">login</i>
+                        </button>
+                        
+                        <br><br>
+                        <a href="#">¿Olvidaste tu contraseña?</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Inicializar selects de Materialize
+    document.addEventListener('DOMContentLoaded', function() {
+        var selects = document.querySelectorAll('select');
+        M.FormSelect.init(selects);
+    });
+</script>
