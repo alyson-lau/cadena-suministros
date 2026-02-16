@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "dev:win": "powershell -ExecutionPolicy Bypass -NoProfile -File scripts/start-dev.ps1 -Action start",
     "test": "jest --coverage --forceExit",
     "test:watch": "jest --watch",
     "test:unit": "jest tests/unit --coverage",
@@ -20,7 +21,10 @@
     "docker:build": "docker build -t cadena-suministros:latest .",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "docker:logs": "docker-compose logs -f backend"
+    "docker:logs": "docker-compose logs -f backend",
+    "services:status": "powershell -ExecutionPolicy Bypass -NoProfile -File scripts/start-dev.ps1 -Action status",
+    "services:stop": "powershell -ExecutionPolicy Bypass -NoProfile -File scripts/start-dev.ps1 -Action stop",
+    "services:logs": "powershell -ExecutionPolicy Bypass -NoProfile -File scripts/start-dev.ps1 -Action logs"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
