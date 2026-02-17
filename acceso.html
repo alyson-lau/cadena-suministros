@@ -11,12 +11,12 @@
         <p><strong>CADENA DE SUMINISTROS</strong></p>
         <nav>
             <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="acceso.html" class="active">Acceso</a></li>
-                <li><a href="tipodeusuario.html">Tipo de Usuario</a></li>
-                <li><a href="conclusion.html">Conclusión</a></li>
-                <li><a href="bibliografia.html">Bibliografía</a></li>
-                <li><a href="navegacion.html">Mapa de Navegación</a></li>
+                <li><a href="/index">Inicio</a></li>
+                <li><a href="/acceso" class="active">Acceso</a></li>
+                <li><a href="/tipodeusuario">Tipo de Usuario</a></li>
+                <li><a href="/conclusion">Conclusión</a></li>
+                <li><a href="/bibliografia">Bibliografía</a></li>
+                <li><a href="/navegacion">Mapa de Navegación</a></li>
                 <li>
                     <div class="user-info" id="userInfo" style="display: none;">
                         <button class="user-button" onclick="toggleUserMenu()">
@@ -330,8 +330,8 @@
         }
         
         function showDatabaseInterface() {
-            // Redirigir a tipodeusuario.html cuando hay sesión activa
-            window.location.href = 'tipodeusuario.html';
+            // Redirigir a tipodeusuario cuando hay sesión activa
+            window.location.href = '/tipodeusuario';
         }
         
         // Registro de usuario
@@ -467,7 +467,7 @@
             
             // Redirigir a la página de Tipo de Usuario después de 1.5 segundos
             setTimeout(() => {
-                window.location.href = 'tipodeusuario.html';
+                window.location.href = '/tipodeusuario';
             }, 1500);
         });
         

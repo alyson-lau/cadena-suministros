@@ -74,7 +74,7 @@
         <div id="result"></div>
         
         <p style="margin-top: 30px;">
-            <a href="tipodeusuario.html">← Volver a la aplicación</a>
+            <a href="/tipodeusuario">← Volver a la aplicación</a>
         </p>
     </div>
 
@@ -107,7 +107,7 @@
                 showResult('✅ Materiales restaurados a los 10 originales. Serás redirigido en 2 segundos...', true);
                 
                 setTimeout(() => {
-                    window.location.href = 'tipodeusuario.html';
+                    window.location.href = '/tipodeusuario';
                 }, 2000);
             } catch (error) {
                 showResult('❌ Error: ' + error.message, false);
@@ -124,7 +124,7 @@
                 showResult('✅ Todo limpiado (materiales, usuarios, sesión). Serás redirigido en 2 segundos...', true);
                 
                 setTimeout(() => {
-                    window.location.href = 'tipodeusuario.html';
+                    window.location.href = '/tipodeusuario';
                 }, 2000);
             } catch (error) {
                 showResult('❌ Error: ' + error.message, false);

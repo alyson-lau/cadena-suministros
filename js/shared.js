@@ -162,11 +162,11 @@ function showUserInfo(user) {
 }
 
 function showRegistrationForm() {
-    window.location.href = 'tipodeusuario.html#registro';
+    window.location.href = '/tipodeusuario#registro';
 }
 
 function showLoginForm() {
-    window.location.href = 'tipodeusuario.html#login';
+    window.location.href = '/tipodeusuario#login';
 }
 
 // Función de mensajes compartida

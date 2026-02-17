@@ -36,23 +36,42 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-app.get('/app', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+
+// Servir index.html de la raíz en / e /index
+app.get(['/', '/index'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Servir los HTMLs individuales de la raíz (sin extensión .html)
+const htmlFiles = [
+  'acceso',
+  'conclusion',
+  'diagnostico',
+  'bibliografia',
+  'limpiar',
+  'navegacion',
+  'tipodeusuario'
+];
+htmlFiles.forEach(file => {
+  app.get('/' + file, (req, res) => {
+    res.sendFile(path.join(__dirname, file + '.html'));
+  });
+});
+
+// Catch-all: si no es API ni HTML conocido, sirve index.html de la raíz
 app.get('*', (req, res) => {
-  if (req.path.startsWith('/api/') || req.path.startsWith('/app')) {
+  if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'Ruta no encontrada' });
   }
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(PORT, () => {
   console.log(`\n========================================`);
   console.log(`  Cadena de Suministros - Servidor`);
   console.log(`========================================`);
-  console.log(`  Frontend AngularJS: http://localhost:${PORT}/app`);
-  console.log(`  API REST:          http://localhost:${PORT}/api`);
+  console.log(`  Frontend AngularJS: http://localhost:${PORT}/index`);
+  console.log(`  API REST:         http://localhost:${PORT}/api`);
   console.log(`  Estado MongoDB:    ${mongoose.connection.readyState === 1 ? 'Conectado' : 'Desconectado'}`);
   console.log(`========================================\n`);
 });
